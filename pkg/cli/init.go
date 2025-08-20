@@ -167,11 +167,18 @@ This is a Chisel configuration management project.
 2. Customize the example module or create new ones:
    ` + "`modules/webserver.yaml`" + `
 
-3. Plan your changes:
+3. Coming soon - Plan and apply workflow:
    ` + "`chisel plan --inventory inventory/hosts.yaml --module webserver`" + `
-
-4. Apply the changes:
    ` + "`chisel apply plan.json`" + `
+
+## Current Status
+
+Chisel is in active development. Currently implemented:
+- ✅ Project initialization (` + "`chisel init`" + `)
+- ✅ Resource type system with file provider
+- ✅ SSH connection management
+- 🚧 Plan/apply workflow (coming soon)
+- 🚧 Module loading and execution (coming soon)
 
 ## Project Structure
 
@@ -179,7 +186,7 @@ This is a Chisel configuration management project.
 - ` + "`inventory/`" + ` - Target host definitions
 - ` + "`modules/`" + ` - Reusable configuration modules
 - ` + "`templates/`" + ` - Configuration templates
-- ` + "`plans/`" + ` - Generated execution plans
+- ` + "`plans/`" + ` - Generated execution plans (coming soon)
 
 ## Documentation
 
@@ -205,7 +212,9 @@ Visit https://github.com/ao/chisel for more information.
 	fmt.Printf("\n")
 	fmt.Printf("🚀 Next steps:\n")
 	fmt.Printf("   cd %s\n", projectName)
-	fmt.Printf("   chisel plan --inventory inventory/hosts.yaml --module webserver\n")
+	fmt.Printf("   # Edit inventory/hosts.yaml with your target hosts\n")
+	fmt.Printf("   # Customize modules/webserver.yaml for your needs\n")
+	fmt.Printf("   # Coming soon: chisel plan and chisel apply commands\n")
 
 	return nil
 }

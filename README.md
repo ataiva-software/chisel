@@ -19,30 +19,31 @@ Chisel is a modern, agentless configuration management and infrastructure orches
 **Chisel's Approach:**
 
 - ✅ **Agentless by default** - SSH/WinRM execution, no persistent footprint
-- ✅ **Plan before apply** - See exactly what will change before execution
+- 🚧 **Plan before apply** - See exactly what will change before execution *(in development)*
 - ✅ **Strongly typed** - Catch errors at compile time, not runtime
-- ✅ **Fast & concurrent** - Go's concurrency model for parallel execution
-- ✅ **Drift detection** - Continuous monitoring without agents
-- ✅ **Policy-driven** - Built-in compliance and governance
-- ✅ **Supply chain security** - Signed modules, provenance tracking
+- 🚧 **Fast & concurrent** - Go's concurrency model for parallel execution *(foundation ready)*
+- 🚧 **Drift detection** - Continuous monitoring without agents *(planned)*
+- 🚧 **Policy-driven** - Built-in compliance and governance *(planned)*
+- 🚧 **Supply chain security** - Signed modules, provenance tracking *(planned)*
 
 ## Quick Start
 
 ```bash
-# Install Chisel
-go install github.com/ao/chisel/cmd/chisel@latest
+# Install Chisel (currently requires building from source)
+git clone https://github.com/ao/chisel.git
+cd chisel
+make build
 
 # Initialize a new project
-chisel init my-infrastructure
+./bin/chisel init my-infrastructure
 
-# Add a module
-chisel module add std/nginx@1.0.0
+# Explore the generated project structure
+cd my-infrastructure
+ls -la
 
-# Plan changes
-chisel plan --inventory hosts.yaml --module nginx
-
-# Apply changes
-chisel apply plan.json
+# Next: Implement plan/apply workflow (coming soon)
+# chisel plan --inventory inventory/hosts.yaml --module webserver
+# chisel apply plan.json
 ```
 
 ## Architecture
@@ -97,7 +98,7 @@ spec:
 Dynamic and static target discovery
 
 ```yaml
-# inventory.yaml
+# inventory/hosts.yaml
 targets:
   webservers:
     selector: "role=web,env=prod"
@@ -112,13 +113,14 @@ targets:
     connection:
       type: ssh
       user: admin
+      key: ~/.ssh/id_rsa
 ```
 
 ### Plans
-Deterministic change previews
+Deterministic change previews *(coming soon)*
 
 ```bash
-$ chisel plan --inventory inventory.yaml --module webserver
+$ chisel plan --inventory inventory/hosts.yaml --module webserver
 Plan: 3 to add, 1 to change, 0 to destroy
 
 + pkg.nginx
