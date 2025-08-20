@@ -1,0 +1,2 @@
+# Allow test private keys in test files
+-----BEGIN PRIVATE KEY-----.*test.*-----END PRIVATE KEY-----
