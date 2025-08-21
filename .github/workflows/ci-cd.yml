@@ -50,9 +50,9 @@ jobs:
       run: |
         ./bin/chisel --help
         cd /tmp
-        ./bin/chisel init test-project
+        $GITHUB_WORKSPACE/bin/chisel init test-project
         cd test-project
-        ./bin/chisel plan --module modules/webserver.yaml --inventory inventory/hosts.yaml
+        $GITHUB_WORKSPACE/bin/chisel plan --module modules/webserver.yaml --inventory inventory/hosts.yaml
 
   release:
     needs: test
