@@ -69,7 +69,7 @@ ls examples/  # simple-file, basic-webserver, user-management
 Typed units of infrastructure state (packages, files, services, users, etc.)
 
 ```yaml
-apiVersion: chisel.dev/v1
+apiVersion: ataiva.com/v1
 kind: Module
 metadata:
   name: webserver

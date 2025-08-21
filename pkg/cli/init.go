@@ -51,7 +51,7 @@ func runInit(cmd *cobra.Command, args []string) error {
 
 	// Create chisel.yaml config file
 	config := ProjectConfig{
-		APIVersion: "chisel.dev/v1",
+		APIVersion: "ataiva.com/v1",
 		Kind:       "Project",
 		Metadata: Metadata{
 			Name:        projectName,
@@ -101,7 +101,7 @@ func runInit(cmd *cobra.Command, args []string) error {
 
 	// Create example module
 	module := ModuleConfig{
-		APIVersion: "chisel.dev/v1",
+		APIVersion: "ataiva.com/v1",
 		Kind:       "Module",
 		Metadata: Metadata{
 			Name:        "webserver",

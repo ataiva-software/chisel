@@ -1,4 +1,4 @@
-apiVersion: chisel.dev/v1
+apiVersion: ataiva.com/v1
 kind: Module
 metadata:
   name: basic-webserver
