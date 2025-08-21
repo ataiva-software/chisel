@@ -4,8 +4,8 @@ import (
 	"context"
 	"testing"
 
-	"github.com/ao/chisel/pkg/ssh"
-	"github.com/ao/chisel/pkg/types"
+	"github.com/ataiva-software/chisel/pkg/ssh"
+	"github.com/ataiva-software/chisel/pkg/types"
 )
 
 func TestFileProvider_Type(t *testing.T) {

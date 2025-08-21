@@ -1,0 +1,9 @@
+apiVersion: chisel.dev/v1
+kind: Project
+metadata:
+  name: basic-webserver
+  description: Basic NGINX web server configuration example
+spec:
+  module_path: ./modules
+  inventory: ./inventory
+  templates: ./templates

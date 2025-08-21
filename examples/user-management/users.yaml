@@ -1,0 +1,45 @@
+apiVersion: chisel.dev/v1
+kind: Module
+metadata:
+  name: user-setup
+
+# Target servers (edit these!)
+targets:
+  - host: "web1.example.com"
+    user: "ubuntu"
+    key: "~/.ssh/id_rsa"
+  - host: "web2.example.com" 
+    user: "ubuntu"
+    key: "~/.ssh/id_rsa"
+
+# Create users and setup access
+resources:
+  # Create developer user
+  - type: user
+    name: developer
+    state: present
+    shell: /bin/bash
+    home: /home/developer
+    groups: 
+      - sudo
+      - docker
+
+  # Setup SSH key for developer
+  - type: file
+    name: developer-ssh-key
+    path: /home/developer/.ssh/authorized_keys
+    content: |
+      ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQ... developer@company.com
+      # Add your team's public SSH keys here
+    mode: "0600"
+    owner: developer
+    group: developer
+
+  # Create SSH directory
+  - type: file
+    name: ssh-directory
+    path: /home/developer/.ssh
+    state: present
+    mode: "0700"
+    owner: developer
+    group: developer

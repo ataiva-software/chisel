@@ -2,7 +2,7 @@
 
 **Carving infrastructure into shape**
 
-[![Go Report Card](https://goreportcard.com/badge/github.com/ao/chisel)](https://goreportcard.com/report/github.com/ao/chisel)
+[![Go Report Card](https://goreportcard.com/badge/github.com/ataiva-software/chisel)](https://goreportcard.com/report/github.com/ataiva-software/chisel)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 Chisel is a modern, agentless configuration management and infrastructure orchestration tool written in Go. It combines the best features of Terraform's plan/apply workflow, Ansible's agentless approach, and Puppet's resource model into a fast, typed, and secure platform.
@@ -30,20 +30,21 @@ Chisel is a modern, agentless configuration management and infrastructure orches
 
 ```bash
 # Install Chisel (currently requires building from source)
-git clone https://github.com/ao/chisel.git
+git clone https://github.com/ataiva-software/chisel.git
 cd chisel
 make build
 
 # Initialize a new project
 ./bin/chisel init my-infrastructure
 
-# Explore the generated project structure
-cd my-infrastructure
-ls -la
+# Or try a simple example
+cp -r examples/simple-file my-first-config
+cd my-first-config
+# Edit module.yaml with your server details
+# Coming soon: ./chisel apply module.yaml
 
-# Next: Implement plan/apply workflow (coming soon)
-# chisel plan --inventory inventory/hosts.yaml --module webserver
-# chisel apply plan.json
+# Explore more examples
+ls examples/  # simple-file, basic-webserver, user-management
 ```
 
 ## Architecture
@@ -248,9 +249,10 @@ MIT License - see [LICENSE](LICENSE) file for details.
 
 ## Community
 
-- **GitHub**: [github.com/ao/chisel](https://github.com/ao/chisel)
-- **Discussions**: [GitHub Discussions](https://github.com/ao/chisel/discussions)
-- **Issues**: [GitHub Issues](https://github.com/ao/chisel/issues)
+- **Website**: [ataiva.com](https://ataiva.com)
+- **GitHub**: [github.com/ataiva-software/chisel](https://github.com/ataiva-software/chisel)
+- **Discussions**: [GitHub Discussions](https://github.com/ataiva-software/chisel/discussions)
+- **Issues**: [GitHub Issues](https://github.com/ataiva-software/chisel/issues)
 
 ## Acknowledgments
 

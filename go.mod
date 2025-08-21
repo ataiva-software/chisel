@@ -1,4 +1,4 @@
-module github.com/ao/chisel
+module github.com/ataiva-software/chisel
 
 go 1.21.0
 

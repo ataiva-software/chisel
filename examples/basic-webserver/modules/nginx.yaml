@@ -1,0 +1,67 @@
+apiVersion: chisel.dev/v1
+kind: Module
+metadata:
+  name: nginx-webserver
+  version: 1.0.0
+  description: Basic NGINX web server setup
+spec:
+  variables:
+    server_name: "_"
+    document_root: "/var/www/html"
+    listen_port: 80
+    
+  resources:
+    # Install NGINX package
+    - type: pkg
+      name: nginx
+      state: present
+    
+    # Create document root directory
+    - type: file
+      name: document-root
+      path: "{{ .document_root }}"
+      state: present
+      mode: "0755"
+      owner: www-data
+      group: www-data
+      
+    # Create custom index.html
+    - type: file
+      name: index-html
+      path: "{{ .document_root }}/index.html"
+      template:
+        from: templates/index.html.tmpl
+        data:
+          server_name: "{{ .server_name }}"
+          timestamp: "{{ now }}"
+      mode: "0644"
+      owner: www-data
+      group: www-data
+      depends_on:
+        - document-root
+    
+    # Configure NGINX
+    - type: file
+      name: nginx-config
+      path: /etc/nginx/sites-enabled/default
+      template:
+        from: templates/nginx.conf.tmpl
+        data:
+          server_name: "{{ .server_name }}"
+          document_root: "{{ .document_root }}"
+          listen_port: "{{ .listen_port }}"
+      mode: "0644"
+      owner: root
+      group: root
+      notify:
+        - reload:nginx
+      depends_on:
+        - nginx
+    
+    # Ensure NGINX is running
+    - type: service
+      name: nginx
+      state: running
+      enabled: true
+      depends_on:
+        - nginx-config

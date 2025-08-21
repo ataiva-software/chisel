@@ -1,0 +1,49 @@
+apiVersion: chisel.dev/v1
+kind: Module
+metadata:
+  name: basic-webserver
+
+# Target server (edit this!)
+target:
+  host: "192.168.1.100"  # Change to your server
+  user: "ubuntu"         # Your SSH username
+  key: "~/.ssh/id_rsa"   # Your SSH key
+
+# Install and configure web server
+resources:
+  # Install nginx
+  - type: pkg
+    name: nginx
+    state: present
+
+  # Create custom homepage
+  - type: file
+    name: index-page
+    path: /var/www/html/index.html
+    content: |
+      <!DOCTYPE html>
+      <html>
+      <head>
+          <title>Welcome to Chisel!</title>
+          <style>
+              body { font-family: Arial; text-align: center; padding: 50px; }
+              h1 { color: #333; }
+              .logo { font-size: 4em; }
+          </style>
+      </head>
+      <body>
+          <div class="logo">🪓</div>
+          <h1>Welcome to Chisel!</h1>
+          <p>Your web server is running and configured by Chisel.</p>
+          <p>Learn more at <a href="https://ataiva.com">ataiva.com</a></p>
+      </body>
+      </html>
+    mode: "0644"
+    owner: www-data
+    group: www-data
+
+  # Start nginx service
+  - type: service
+    name: nginx
+    state: running
+    enabled: true

@@ -1,0 +1,19 @@
+targets:
+  webservers:
+    # Example using host list
+    hosts:
+      - web1.example.com
+      - web2.example.com
+    connection:
+      type: ssh
+      user: ubuntu
+      key: ~/.ssh/id_rsa
+      port: 22
+  
+  # Alternative: using selectors (for cloud environments)
+  # webservers:
+  #   selector: "role=web,env=production"
+  #   connection:
+  #     type: ssh
+  #     user: ubuntu
+  #     key: ~/.ssh/id_rsa

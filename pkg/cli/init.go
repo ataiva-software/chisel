@@ -190,7 +190,7 @@ Chisel is in active development. Currently implemented:
 
 ## Documentation
 
-Visit https://github.com/ao/chisel for more information.
+Visit https://github.com/ataiva-software/chisel for more information.
 `, projectName)
 
 	readmePath := filepath.Join(projectName, "README.md")

@@ -7,8 +7,8 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/ao/chisel/pkg/ssh"
-	"github.com/ao/chisel/pkg/types"
+	"github.com/ataiva-software/chisel/pkg/ssh"
+	"github.com/ataiva-software/chisel/pkg/types"
 )
 
 // FileProvider manages file resources

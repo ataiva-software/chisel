@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/ao/chisel/pkg/cli"
+	"github.com/ataiva-software/chisel/pkg/cli"
 )
 
 var version = "dev"
