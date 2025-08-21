@@ -1,0 +1,19 @@
+apiVersion: ataiva.com/chisel/v1
+kind: Inventory
+targets:
+  databases:
+    hosts:
+      - db1.example.com
+      - db2.example.com
+    connection:
+      host: db1.example.com
+      user: admin
+      private_key_path: ~/.ssh/id_rsa
+      port: 22
+  webservers:
+    selector: role=web,env=prod
+    connection:
+      host: web1.example.com
+      user: ubuntu
+      private_key_path: ~/.ssh/id_rsa
+      port: 22

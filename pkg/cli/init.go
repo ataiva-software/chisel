@@ -51,7 +51,7 @@ func runInit(cmd *cobra.Command, args []string) error {
 
 	// Create chisel.yaml config file
 	config := ProjectConfig{
-		APIVersion: "ataiva.com/v1",
+		APIVersion: "ataiva.com/chisel/v1",
 		Kind:       "Project",
 		Metadata: Metadata{
 			Name:        projectName,
@@ -71,13 +71,16 @@ func runInit(cmd *cobra.Command, args []string) error {
 
 	// Create example inventory file
 	inventory := InventoryConfig{
+		APIVersion: "ataiva.com/chisel/v1",
+		Kind:       "Inventory",
 		Targets: map[string]TargetGroup{
 			"webservers": {
 				Selector: "role=web,env=prod",
 				Connection: ConnectionConfig{
-					Type: "ssh",
-					User: "ubuntu",
-					Key:  "~/.ssh/id_rsa",
+					Host:           "web1.example.com",
+					User:           "ubuntu",
+					PrivateKeyPath: "~/.ssh/id_rsa",
+					Port:           22,
 				},
 			},
 			"databases": {
@@ -86,9 +89,10 @@ func runInit(cmd *cobra.Command, args []string) error {
 					"db2.example.com",
 				},
 				Connection: ConnectionConfig{
-					Type: "ssh",
-					User: "admin",
-					Key:  "~/.ssh/id_rsa",
+					Host:           "db1.example.com",
+					User:           "admin",
+					PrivateKeyPath: "~/.ssh/id_rsa",
+					Port:           22,
 				},
 			},
 		},
@@ -101,7 +105,7 @@ func runInit(cmd *cobra.Command, args []string) error {
 
 	// Create example module
 	module := ModuleConfig{
-		APIVersion: "ataiva.com/v1",
+		APIVersion: "ataiva.com/chisel/v1",
 		Kind:       "Module",
 		Metadata: Metadata{
 			Name:        "webserver",
@@ -167,9 +171,9 @@ This is a Chisel configuration management project.
 2. Customize the example module or create new ones:
    ` + "`modules/webserver.yaml`" + `
 
-3. Coming soon - Plan and apply workflow:
-   ` + "`chisel plan --inventory inventory/hosts.yaml --module webserver`" + `
-   ` + "`chisel apply plan.json`" + `
+3. Plan and apply workflow:
+   ` + "`chisel plan --module modules/webserver.yaml --inventory inventory/hosts.yaml`" + `
+   ` + "`chisel apply --module modules/webserver.yaml --inventory inventory/hosts.yaml`" + `
 
 ## Current Status
 
@@ -177,8 +181,12 @@ Chisel is in active development. Currently implemented:
 - ✅ Project initialization (` + "`chisel init`" + `)
 - ✅ Resource type system with file provider
 - ✅ SSH connection management
-- 🚧 Plan/apply workflow (coming soon)
-- 🚧 Module loading and execution (coming soon)
+- ✅ Plan/apply workflow
+- ✅ Module loading and execution
+- ✅ Static inventory support
+- 🚧 Additional providers (pkg, service, user)
+- 🚧 Dynamic inventory (cloud APIs)
+- 🚧 Templating system
 
 ## Project Structure
 
@@ -214,7 +222,8 @@ Visit https://github.com/ataiva-software/chisel for more information.
 	fmt.Printf("   cd %s\n", projectName)
 	fmt.Printf("   # Edit inventory/hosts.yaml with your target hosts\n")
 	fmt.Printf("   # Customize modules/webserver.yaml for your needs\n")
-	fmt.Printf("   # Coming soon: chisel plan and chisel apply commands\n")
+	fmt.Printf("   # Create a plan: chisel plan --module modules/webserver.yaml --inventory inventory/hosts.yaml\n")
+	fmt.Printf("   # Apply changes: chisel apply --module modules/webserver.yaml --inventory inventory/hosts.yaml\n")
 
 	return nil
 }
@@ -254,7 +263,9 @@ type ProjectSpec struct {
 }
 
 type InventoryConfig struct {
-	Targets map[string]TargetGroup `yaml:"targets"`
+	APIVersion string                 `yaml:"apiVersion"`
+	Kind       string                 `yaml:"kind"`
+	Targets    map[string]TargetGroup `yaml:"targets"`
 }
 
 type TargetGroup struct {
@@ -264,10 +275,10 @@ type TargetGroup struct {
 }
 
 type ConnectionConfig struct {
-	Type string `yaml:"type"`
-	User string `yaml:"user"`
-	Key  string `yaml:"key,omitempty"`
-	Port int    `yaml:"port,omitempty"`
+	Host           string `yaml:"host"`
+	User           string `yaml:"user"`
+	PrivateKeyPath string `yaml:"private_key_path,omitempty"`
+	Port           int    `yaml:"port,omitempty"`
 }
 
 type ModuleConfig struct {

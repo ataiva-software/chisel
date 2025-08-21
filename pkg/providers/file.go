@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	"github.com/ataiva-software/chisel/pkg/ssh"
+	"github.com/ataiva-software/chisel/pkg/templating"
 	"github.com/ataiva-software/chisel/pkg/types"
 )
 
@@ -257,8 +258,13 @@ func (p *FileProvider) createFile(ctx context.Context, resource *types.Resource)
 		}
 	}
 
-	// Write content if provided
-	if content, ok := resource.Properties["content"].(string); ok {
+	// Handle content - check for template first, then regular content
+	content, err := p.resolveContent(resource)
+	if err != nil {
+		return fmt.Errorf("failed to resolve content: %w", err)
+	}
+
+	if content != "" {
 		if err := p.writeFileContent(ctx, path, content); err != nil {
 			return err
 		}
@@ -276,6 +282,42 @@ func (p *FileProvider) createFile(ctx context.Context, resource *types.Resource)
 
 	// Set permissions and ownership
 	return p.setFileAttributes(ctx, resource)
+}
+
+// resolveContent resolves the content for a file, handling templates if specified
+func (p *FileProvider) resolveContent(resource *types.Resource) (string, error) {
+	// Check for template content first
+	if templateStr, ok := resource.Properties["template"].(string); ok {
+		vars := make(map[string]interface{})
+		if varsInterface, ok := resource.Properties["vars"]; ok {
+			if varsMap, ok := varsInterface.(map[string]interface{}); ok {
+				vars = varsMap
+			}
+		}
+		
+		engine := templating.NewTemplateEngine()
+		return engine.Render(templateStr, vars)
+	}
+	
+	// Check for template file
+	if templateFile, ok := resource.Properties["template_file"].(string); ok {
+		vars := make(map[string]interface{})
+		if varsInterface, ok := resource.Properties["vars"]; ok {
+			if varsMap, ok := varsInterface.(map[string]interface{}); ok {
+				vars = varsMap
+			}
+		}
+		
+		engine := templating.NewTemplateEngine()
+		return engine.RenderFile(templateFile, vars)
+	}
+	
+	// Fall back to regular content
+	if content, ok := resource.Properties["content"].(string); ok {
+		return content, nil
+	}
+	
+	return "", nil
 }
 
 // updateFile updates an existing file

@@ -2,7 +2,7 @@
 
 Simple, practical examples to get you started with Chisel configuration management.
 
-## 🚀 Quick Start Examples
+## Quick Start Examples
 
 ### 1. Simple File (`simple-file/`)
 The absolute simplest example - create a file on a server.
@@ -22,7 +22,7 @@ Create users and manage SSH access.
 - **What it does**: Creates users, sets up SSH keys, configures sudo
 - **Files**: One `users.yaml` file
 
-## 💡 Design Philosophy
+## Design Philosophy
 
 These examples follow Chisel's "simple by default" approach:
 
@@ -62,7 +62,7 @@ These examples follow Chisel's "simple by default" approach:
 - Check the [GitHub repository](https://github.com/ataiva-software/chisel)
 - Look at the main README.md for more details
 
-## 🎯 Next Steps
+## Next Steps
 
 Once you're comfortable with these examples:
 - Combine multiple resources in one file

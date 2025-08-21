@@ -1,0 +1,83 @@
+apiVersion: ataiva.com/chisel/v1
+kind: Module
+metadata:
+  name: webserver
+  version: 1.0.0
+  description: Complete webserver setup with nginx
+  
+spec:
+  resources:
+    # Install nginx package
+    - type: pkg
+      name: nginx
+      state: present
+    
+    # Create custom nginx configuration
+    - type: file
+      name: nginx-config
+      path: /etc/nginx/sites-available/default
+      template: |
+        server {
+            listen 80 default_server;
+            listen [::]:80 default_server;
+            
+            root /var/www/html;
+            index index.html index.htm index.nginx-debian.html;
+            
+            server_name {{default "localhost" .server_name}};
+            
+            location / {
+                try_files $uri $uri/ =404;
+            }
+            
+            {{if .enable_status}}
+            location /nginx_status {
+                stub_status on;
+                access_log off;
+                allow 127.0.0.1;
+                deny all;
+            }
+            {{end}}
+        }
+      vars:
+        server_name: "example.com"
+        enable_status: true
+      mode: "0644"
+    
+    # Create a custom index page
+    - type: file
+      name: index-page
+      path: /var/www/html/index.html
+      content: |
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>Welcome to Chisel!</title>
+            <style>
+                body { font-family: Arial, sans-serif; margin: 40px; }
+                .header { color: #333; text-align: center; }
+                .content { max-width: 600px; margin: 0 auto; }
+            </style>
+        </head>
+        <body>
+            <div class="content">
+                <h1 class="header">🔨 Welcome to Chisel!</h1>
+                <p>This web server was configured using Chisel configuration management.</p>
+                <p>Chisel is a modern, agentless configuration management tool that combines the best features of Terraform, Ansible, and Puppet.</p>
+                <ul>
+                    <li>✅ Agentless by default</li>
+                    <li>✅ Plan before apply</li>
+                    <li>✅ Strongly typed</li>
+                    <li>✅ Fast & concurrent</li>
+                </ul>
+                <p>Visit <a href="https://ataiva.com">ataiva.com</a> to learn more!</p>
+            </div>
+        </body>
+        </html>
+      mode: "0644"
+    
+    # Ensure nginx service is running and enabled
+    - type: service
+      name: nginx
+      state: running
+      enabled: true

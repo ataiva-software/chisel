@@ -1,26 +1,20 @@
-apiVersion: ataiva.com/v1
+apiVersion: ataiva.com/chisel/v1
 kind: Module
 metadata:
   name: simple-file-example
+  version: 1.0.0
+  description: Simple file creation example
   
-# Target server (edit this!)
-target:
-  host: "192.168.1.100"  # Change to your server IP
-  user: "ubuntu"         # Change to your username
-  key: "~/.ssh/id_rsa"   # Path to your SSH key
-
-# What to do
-resources:
-  - type: file
-    name: hello-file
-    path: /tmp/hello.txt
-    content: |
-      Hello from Chisel!
-      
-      This file was created by Chisel configuration management.
-      Timestamp: $(date)
-      
-      Visit https://ataiva.com to learn more!
-    mode: "0644"
-    owner: root
-    group: root
+spec:
+  resources:
+    - type: file
+      name: hello-file
+      state: present
+      path: /tmp/hello.txt
+      content: |
+        Hello from Chisel!
+        
+        This file was created by Chisel configuration management.
+        
+        Visit https://ataiva.com to learn more!
+      mode: "0644"

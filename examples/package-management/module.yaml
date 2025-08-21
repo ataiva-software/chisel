@@ -1,0 +1,21 @@
+apiVersion: ataiva.com/chisel/v1
+kind: Module
+metadata:
+  name: package-management
+  version: 1.0.0
+  description: Package management example
+  
+spec:
+  resources:
+    - type: pkg
+      name: curl
+      state: present
+    - type: pkg
+      name: wget
+      state: present
+    - type: pkg
+      name: vim
+      state: present
+    - type: pkg
+      name: nano
+      state: absent

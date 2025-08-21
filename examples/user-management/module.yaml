@@ -1,0 +1,119 @@
+apiVersion: ataiva.com/chisel/v1
+kind: Module
+metadata:
+  name: user-management
+  version: 1.0.0
+  description: Complete user management with all core providers
+spec:
+  resources:
+    # Install development packages first
+    - type: pkg
+      name: git
+      state: present
+
+    - type: pkg
+      name: vim
+      state: present
+
+    - type: pkg
+      name: curl
+      state: present
+
+    - type: pkg
+      name: wget
+      state: present
+
+    # Create a user with specific properties
+    - type: user
+      name: devuser
+      state: present
+
+    # Create user's home directory structure
+    - type: file
+      name: devuser-home
+      state: present
+      path: /home/devuser
+      file_type: directory
+      mode: "0755"
+      owner: devuser
+      group: devuser
+
+    # Create user's SSH directory
+    - type: file
+      name: devuser-ssh-dir
+      state: present
+      path: /home/devuser/.ssh
+      file_type: directory
+      mode: "0700"
+      owner: devuser
+      group: devuser
+
+    # Create user's .bashrc
+    - type: file
+      name: devuser-bashrc
+      state: present
+      path: /home/devuser/.bashrc
+      content: |
+        # User-specific aliases and functions
+        alias ll='ls -alF'
+        alias la='ls -A'
+        alias l='ls -CF'
+        
+        # Add local bin to PATH
+        export PATH="$HOME/.local/bin:$PATH"
+        
+        # Set default editor
+        export EDITOR=vim
+        
+        # Custom prompt
+        PS1='\u@\h:\w\$ '
+      mode: "0644"
+      owner: devuser
+      group: devuser
+
+    # Create workspace directories
+    - type: shell
+      name: create-dev-workspace
+      command: mkdir -p /home/devuser/workspace/{projects,scripts,tmp}
+      creates: /home/devuser/workspace
+
+    # Set up Git configuration
+    - type: shell
+      name: configure-git
+      command: |
+        git config --global user.name "Development User" &&
+        git config --global user.email "devuser@example.com" &&
+        git config --global init.defaultBranch main
+      creates: /home/devuser/.gitconfig
+
+    # Create a sample script
+    - type: file
+      name: devuser-hello-script
+      state: present
+      path: /home/devuser/scripts/hello.sh
+      content: |
+        #!/bin/bash
+        echo "Hello from Chisel-managed user: $(whoami)"
+        echo "Current directory: $(pwd)"
+        echo "System info: $(uname -a)"
+      mode: "0755"
+      owner: devuser
+      group: devuser
+
+    # Ensure SSH service is running
+    - type: service
+      name: ssh
+      state: running
+
+    # Create a log file for user activities
+    - type: file
+      name: devuser-activity-log
+      state: present
+      path: /var/log/devuser-activities.log
+      content: |
+        # Development User Activity Log
+        # Created by Chisel configuration management
+        
+      mode: "0644"
+      owner: root
+      group: root

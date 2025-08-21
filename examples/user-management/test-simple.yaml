@@ -1,0 +1,10 @@
+apiVersion: ataiva.com/chisel/v1
+kind: Module
+metadata:
+  name: simple-test
+  version: 1.0.0
+spec:
+  resources:
+    - type: user
+      name: testuser
+      state: present

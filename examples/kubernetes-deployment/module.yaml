@@ -1,0 +1,240 @@
+apiVersion: ataiva.com/chisel/v1
+kind: Module
+metadata:
+  name: kubernetes-web-app
+  version: 1.0.0
+  description: Complete Kubernetes web application deployment
+  labels:
+    environment: production
+    platform: kubernetes
+    team: platform
+spec:
+  resources:
+    # Namespace
+    - type: kubernetes
+      name: web-app-namespace
+      state: present
+      properties:
+        kind: Namespace
+        namespace: web-app
+        metadata:
+          name: web-app
+          labels:
+            name: web-app
+            environment: production
+
+    # ConfigMap for application configuration
+    - type: kubernetes
+      name: web-app-config
+      state: present
+      properties:
+        kind: ConfigMap
+        namespace: web-app
+        metadata:
+          name: web-app-config
+        data:
+          app.properties: |
+            server.port=8080
+            logging.level.root=INFO
+            spring.profiles.active=production
+          nginx.conf: |
+            server {
+                listen 80;
+                server_name _;
+                
+                location / {
+                    proxy_pass http://localhost:8080;
+                    proxy_set_header Host $host;
+                    proxy_set_header X-Real-IP $remote_addr;
+                }
+            }
+
+    # Secret for database credentials
+    - type: kubernetes
+      name: web-app-secrets
+      state: present
+      properties:
+        kind: Secret
+        namespace: web-app
+        type: Opaque
+        metadata:
+          name: web-app-secrets
+        data:
+          database-url: cG9zdGdyZXNxbDovL3VzZXI6cGFzc0BkYi5leGFtcGxlLmNvbS9hcHBkYg==
+          api-key: YWJjZGVmZ2hpams=
+
+    # Deployment for the web application
+    - type: kubernetes
+      name: web-app-deployment
+      state: present
+      properties:
+        kind: Deployment
+        namespace: web-app
+        metadata:
+          name: web-app
+          labels:
+            app: web-app
+            version: v1.0.0
+        spec:
+          replicas: 3
+          selector:
+            matchLabels:
+              app: web-app
+          template:
+            metadata:
+              labels:
+                app: web-app
+                version: v1.0.0
+            spec:
+              containers:
+                - name: web-app
+                  image: nginx:1.21-alpine
+                  ports:
+                    - containerPort: 80
+                      name: http
+                  env:
+                    - name: DATABASE_URL
+                      valueFrom:
+                        secretKeyRef:
+                          name: web-app-secrets
+                          key: database-url
+                    - name: API_KEY
+                      valueFrom:
+                        secretKeyRef:
+                          name: web-app-secrets
+                          key: api-key
+                  volumeMounts:
+                    - name: config-volume
+                      mountPath: /etc/nginx/conf.d
+                    - name: app-config
+                      mountPath: /app/config
+                  resources:
+                    requests:
+                      memory: "128Mi"
+                      cpu: "100m"
+                    limits:
+                      memory: "256Mi"
+                      cpu: "200m"
+                  livenessProbe:
+                    httpGet:
+                      path: /health
+                      port: 80
+                    initialDelaySeconds: 30
+                    periodSeconds: 10
+                  readinessProbe:
+                    httpGet:
+                      path: /ready
+                      port: 80
+                    initialDelaySeconds: 5
+                    periodSeconds: 5
+              volumes:
+                - name: config-volume
+                  configMap:
+                    name: web-app-config
+                    items:
+                      - key: nginx.conf
+                        path: default.conf
+                - name: app-config
+                  configMap:
+                    name: web-app-config
+                    items:
+                      - key: app.properties
+                        path: application.properties
+
+    # Service to expose the deployment
+    - type: kubernetes
+      name: web-app-service
+      state: present
+      properties:
+        kind: Service
+        namespace: web-app
+        metadata:
+          name: web-app-service
+          labels:
+            app: web-app
+        spec:
+          type: ClusterIP
+          selector:
+            app: web-app
+          ports:
+            - name: http
+              port: 80
+              targetPort: 80
+              protocol: TCP
+
+    # Ingress for external access
+    - type: kubernetes
+      name: web-app-ingress
+      state: present
+      properties:
+        kind: Ingress
+        namespace: web-app
+        metadata:
+          name: web-app-ingress
+          annotations:
+            kubernetes.io/ingress.class: nginx
+            cert-manager.io/cluster-issuer: letsencrypt-prod
+            nginx.ingress.kubernetes.io/ssl-redirect: "true"
+        spec:
+          tls:
+            - hosts:
+                - app.example.com
+              secretName: web-app-tls
+          rules:
+            - host: app.example.com
+              http:
+                paths:
+                  - path: /
+                    pathType: Prefix
+                    backend:
+                      service:
+                        name: web-app-service
+                        port:
+                          number: 80
+
+    # Horizontal Pod Autoscaler
+    - type: kubernetes
+      name: web-app-hpa
+      state: present
+      properties:
+        kind: HorizontalPodAutoscaler
+        namespace: web-app
+        metadata:
+          name: web-app-hpa
+        spec:
+          scaleTargetRef:
+            apiVersion: apps/v1
+            kind: Deployment
+            name: web-app
+          minReplicas: 3
+          maxReplicas: 10
+          metrics:
+            - type: Resource
+              resource:
+                name: cpu
+                target:
+                  type: Utilization
+                  averageUtilization: 70
+            - type: Resource
+              resource:
+                name: memory
+                target:
+                  type: Utilization
+                  averageUtilization: 80
+
+    # PersistentVolumeClaim for data storage
+    - type: kubernetes
+      name: web-app-storage
+      state: present
+      properties:
+        kind: PersistentVolumeClaim
+        namespace: web-app
+        metadata:
+          name: web-app-storage
+        spec:
+          accessModes:
+            - ReadWriteOnce
+          resources:
+            requests:
+              storage: 10Gi
+          storageClassName: fast-ssd

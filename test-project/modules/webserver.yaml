@@ -1,0 +1,24 @@
+apiVersion: ataiva.com/chisel/v1
+kind: Module
+metadata:
+  name: webserver
+  version: 1.0.0
+  description: Basic web server configuration
+spec:
+  resources:
+    - type: pkg
+      name: nginx
+      state: present
+    - type: file
+      name: nginx-config
+      notify:
+        - restart:nginx
+      content: "server {\n    listen 80 default_server;\n    listen [::]:80 default_server;\n    \n    root /var/www/html;\n    index index.html index.htm index.nginx-debian.html;\n    \n    server_name _;\n    \n    location / {\n        try_files $uri $uri/ =404;\n    }\n}"
+      group: root
+      mode: "0644"
+      owner: root
+      path: /etc/nginx/sites-enabled/default
+    - type: service
+      name: nginx
+      state: running
+      enabled: true

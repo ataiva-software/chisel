@@ -2,6 +2,9 @@ package providers
 
 import (
 	"context"
+	"os"
+	"path/filepath"
+	"strings"
 	"testing"
 
 	"github.com/ataiva-software/chisel/pkg/ssh"
@@ -407,12 +410,12 @@ func (m *MockSSHConnection) Execute(ctx context.Context, command string) (*ssh.E
 	if result, ok := m.responses[command]; ok {
 		return result, nil
 	}
-	// Default response for unknown commands
+	// Default response for unknown commands - fail with non-zero exit code
 	return &ssh.ExecuteResult{
 		Command:  command,
-		ExitCode: 0,
+		ExitCode: 1,
 		Stdout:   "",
-		Stderr:   "",
+		Stderr:   "command not found in mock",
 	}, nil
 }
 
@@ -426,3 +429,159 @@ func (m *MockSSHConnection) Close() error {
 
 // Ensure MockSSHConnection implements ssh.Executor
 var _ ssh.Executor = (*MockSSHConnection)(nil)
+
+func TestFileProvider_Apply_WithTemplate(t *testing.T) {
+	// Create a temporary directory for testing
+	tempDir, err := os.MkdirTemp("", "chisel-file-test")
+	if err != nil {
+		t.Fatalf("Failed to create temp dir: %v", err)
+	}
+	defer os.RemoveAll(tempDir)
+
+	tests := []struct {
+		name     string
+		resource types.Resource
+		wantErr  bool
+		validate func(t *testing.T, path string)
+	}{
+		{
+			name: "create file with template content",
+			resource: types.Resource{
+				Type: "file",
+				Name: "templated-file",
+				Properties: map[string]interface{}{
+					"path":     filepath.Join(tempDir, "templated.txt"),
+					"template": "Hello {{.name}}! You have {{.count}} messages.",
+					"vars": map[string]interface{}{
+						"name":  "Alice",
+						"count": 5,
+					},
+					"mode": "0644",
+				},
+			},
+			wantErr: false,
+			validate: func(t *testing.T, path string) {
+				content, err := os.ReadFile(path)
+				if err != nil {
+					t.Errorf("Failed to read file: %v", err)
+					return
+				}
+				expected := "Hello Alice! You have 5 messages.\n"
+				if string(content) != expected {
+					t.Errorf("File content = %q, want %q", string(content), expected)
+				}
+			},
+		},
+		{
+			name: "create file with template file",
+			resource: types.Resource{
+				Type: "file",
+				Name: "templated-from-file",
+				Properties: map[string]interface{}{
+					"path":         filepath.Join(tempDir, "from-template.txt"),
+					"template_file": "testdata/config.tmpl",
+					"vars": map[string]interface{}{
+						"server_name": "web01",
+						"port":        8080,
+						"debug":       true,
+					},
+					"mode": "0644",
+				},
+			},
+			wantErr: false,
+			validate: func(t *testing.T, path string) {
+				content, err := os.ReadFile(path)
+				if err != nil {
+					t.Errorf("Failed to read file: %v", err)
+					return
+				}
+				// Check that template was processed
+				contentStr := string(content)
+				if !strings.Contains(contentStr, "server_name=web01") {
+					t.Errorf("Template not processed correctly, content: %s", contentStr)
+				}
+			},
+		},
+		{
+			name: "template with conditional",
+			resource: types.Resource{
+				Type: "file",
+				Name: "conditional-template",
+				Properties: map[string]interface{}{
+					"path":     filepath.Join(tempDir, "conditional.txt"),
+					"template": "{{if .enabled}}Service enabled{{else}}Service disabled{{end}}",
+					"vars": map[string]interface{}{
+						"enabled": false,
+					},
+					"mode": "0644",
+				},
+			},
+			wantErr: false,
+			validate: func(t *testing.T, path string) {
+				content, err := os.ReadFile(path)
+				if err != nil {
+					t.Errorf("Failed to read file: %v", err)
+					return
+				}
+				expected := "Service disabled\n"
+				if string(content) != expected {
+					t.Errorf("File content = %q, want %q", string(content), expected)
+				}
+			},
+		},
+		{
+			name: "invalid template syntax",
+			resource: types.Resource{
+				Type: "file",
+				Name: "invalid-template",
+				Properties: map[string]interface{}{
+					"path":     filepath.Join(tempDir, "invalid.txt"),
+					"template": "Hello {{.name}!",  // Missing closing brace
+					"vars": map[string]interface{}{
+						"name": "World",
+					},
+					"mode": "0644",
+				},
+			},
+			wantErr: true,
+			validate: func(t *testing.T, path string) {
+				// File should not exist due to template error
+				if _, err := os.Stat(path); !os.IsNotExist(err) {
+					t.Errorf("File should not exist due to template error")
+				}
+			},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			// Use local file operations for templating tests
+			provider := NewFileProvider(&ssh.LocalExecutor{})
+			ctx := context.Background()
+			
+			diff := &types.ResourceDiff{
+				ResourceID: tt.resource.Name,
+				Action:     types.ActionCreate,
+				Changes:    make(map[string]interface{}),
+				Reason:     "creating new file",
+			}
+
+			err := provider.Apply(ctx, &tt.resource, diff)
+			
+			if tt.wantErr {
+				if err == nil {
+					t.Errorf("FileProvider.Apply() expected error but got none")
+				}
+			} else {
+				if err != nil {
+					t.Errorf("FileProvider.Apply() unexpected error = %v", err)
+				}
+			}
+			
+			// Run validation
+			if path, ok := tt.resource.Properties["path"].(string); ok {
+				tt.validate(t, path)
+			}
+		})
+	}
+}

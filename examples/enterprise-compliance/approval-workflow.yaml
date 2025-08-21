@@ -1,0 +1,76 @@
+apiVersion: ataiva.com/chisel/v1
+kind: ApprovalWorkflow
+metadata:
+  name: production-changes
+  description: Multi-stage approval workflow for production environment changes
+spec:
+  # Workflow applies to production environment changes
+  conditions:
+    - field: environment
+      operator: equals
+      value: production
+    - field: criticality
+      operator: equals
+      value: high
+
+  # Multi-stage approval process
+  stages:
+    # Stage 1: Security Review
+    - name: security-review
+      description: Security team must review all production changes
+      approvers:
+        - security-lead@company.com
+        - security-architect@company.com
+      required: 1
+      timeout: 24h
+
+    # Stage 2: Operations Review  
+    - name: operations-review
+      description: Operations team must approve infrastructure changes
+      approvers:
+        - ops-manager@company.com
+        - platform-lead@company.com
+      required: 1
+      timeout: 12h
+
+    # Stage 3: Change Advisory Board (for critical changes)
+    - name: change-advisory-board
+      description: CAB approval for high-impact changes
+      approvers:
+        - change-manager@company.com
+        - engineering-director@company.com
+      required: 1
+      timeout: 48h
+      conditions:
+        - field: criticality
+          operator: equals
+          value: critical
+
+  # Global workflow settings
+  timeout: 72h
+  auto_approve_on_success: false
+  require_comment: true
+  
+  # Notification settings
+  notifications:
+    on_submit:
+      - type: email
+        recipients: 
+          - platform-team@company.com
+      - type: slack
+        channel: "#platform-approvals"
+    
+    on_approval:
+      - type: email
+        recipients:
+          - "{{ .Submitter }}"
+      - type: slack
+        channel: "#platform-approvals"
+    
+    on_rejection:
+      - type: email
+        recipients:
+          - "{{ .Submitter }}"
+          - platform-team@company.com
+      - type: slack
+        channel: "#platform-approvals"

@@ -1,10 +1,11 @@
 # Chisel Makefile
 
-.PHONY: build test test-integration clean fmt lint install dev
+.PHONY: build test test-integration clean fmt lint install dev docs
 
 # Build variables
 BINARY_NAME=chisel
 BUILD_DIR=bin
+DOCS_DIR=docs
 VERSION?=$(shell git describe --tags --always --dirty)
 LDFLAGS=-ldflags "-X main.version=${VERSION}"
 
@@ -17,10 +18,22 @@ GOGET=$(GOCMD) get
 GOMOD=$(GOCMD) mod
 
 # Default target
-all: test build
+all: test docs build
+
+# Generate documentation
+docs:
+	@echo "Generating documentation..."
+	@mkdir -p $(DOCS_DIR)
+	@$(GOCMD) run scripts/generate-docs.go $(DOCS_DIR)/
+	@echo "Documentation generated in $(DOCS_DIR)/"
 
 # Build the binary
-build:
+build: docs
+	mkdir -p $(BUILD_DIR)
+	$(GOBUILD) $(LDFLAGS) -o $(BUILD_DIR)/$(BINARY_NAME) ./cmd/chisel
+
+# Development build (faster, no docs)
+dev-build:
 	mkdir -p $(BUILD_DIR)
 	$(GOBUILD) $(LDFLAGS) -o $(BUILD_DIR)/$(BINARY_NAME) ./cmd/chisel
 
@@ -36,6 +49,7 @@ test-integration:
 clean:
 	$(GOCLEAN)
 	rm -rf $(BUILD_DIR)
+	rm -rf $(DOCS_DIR)
 	rm -f coverage.out
 
 # Format code
@@ -80,7 +94,7 @@ vuln:
 	govulncheck ./...
 
 # Release build for multiple platforms
-release:
+release: docs
 	mkdir -p $(BUILD_DIR)
 	GOOS=linux GOARCH=amd64 $(GOBUILD) $(LDFLAGS) -o $(BUILD_DIR)/$(BINARY_NAME)-linux-amd64 ./cmd/chisel
 	GOOS=linux GOARCH=arm64 $(GOBUILD) $(LDFLAGS) -o $(BUILD_DIR)/$(BINARY_NAME)-linux-arm64 ./cmd/chisel
@@ -92,10 +106,19 @@ release:
 docker:
 	docker build -t chisel:$(VERSION) .
 
+# Run examples
+example-simple: dev-build
+	./$(BUILD_DIR)/$(BINARY_NAME) plan --module examples/simple-file/module.yaml
+
+example-user: dev-build
+	./$(BUILD_DIR)/$(BINARY_NAME) plan --module examples/user-management/module.yaml
+
 # Help
 help:
 	@echo "Available targets:"
-	@echo "  build          - Build the binary"
+	@echo "  build          - Build the binary with documentation"
+	@echo "  dev-build      - Fast development build (no docs)"
+	@echo "  docs           - Generate documentation only"
 	@echo "  test           - Run unit tests"
 	@echo "  test-integration - Run integration tests"
 	@echo "  clean          - Clean build artifacts"
@@ -110,4 +133,6 @@ help:
 	@echo "  vuln           - Check for vulnerabilities"
 	@echo "  release        - Build for multiple platforms"
 	@echo "  docker         - Build Docker image"
+	@echo "  example-simple - Run simple file example"
+	@echo "  example-user   - Run user management example"
 	@echo "  help           - Show this help"

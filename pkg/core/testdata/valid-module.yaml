@@ -1,0 +1,13 @@
+apiVersion: ataiva.com/chisel/v1
+kind: Module
+metadata:
+  name: test-module
+  version: 1.0.0
+  description: A test module
+spec:
+  resources:
+    - type: file
+      name: test-file
+      properties:
+        path: /tmp/test
+        content: test content

@@ -1,0 +1,9 @@
+apiVersion: ataiva.com/chisel/v1
+kind: Project
+metadata:
+  name: test-project
+  description: A Chisel configuration management project
+spec:
+  module_path: ./modules
+  inventory: ./inventory
+  templates: ./templates

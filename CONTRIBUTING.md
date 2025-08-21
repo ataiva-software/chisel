@@ -2,232 +2,203 @@
 
 Thank you for your interest in contributing to Chisel! This document provides guidelines and information for contributors.
 
-## Development Philosophy
+## 🚨 Alpha Software Notice
 
-Chisel follows Test-Driven Development (TDD) principles:
-
-1. **Write failing tests first** - Before implementing any feature, write tests that describe the expected behavior
-2. **Implement minimal code to pass** - Write just enough code to make the tests pass
-3. **Refactor and improve** - Clean up the code while keeping tests green
-4. **Repeat** - Continue this cycle for all new features
+Chisel is currently in **alpha stage**. Many features use mock implementations for testing purposes. Please check our [implementation status](README.md#implementation-status) before contributing.
 
 ## Getting Started
 
 ### Prerequisites
-
 - Go 1.21 or later
 - Make
 - Git
 
-### Setting up the development environment
+### Development Setup
+```bash
+# Clone the repository
+git clone https://github.com/ataiva-software/chisel.git
+cd chisel
 
-1. Fork the repository on GitHub
-2. Clone your fork:
-   ```bash
-   git clone https://github.com/your-username/chisel.git
-   cd chisel
-   ```
-3. Install dependencies:
-   ```bash
-   make deps
-   ```
-4. Run tests to ensure everything works:
-   ```bash
-   make test
-   ```
+# Install dependencies and build
+make build
+
+# Run tests
+make test
+
+# Run integration tests
+make test-integration
+```
 
 ## Development Workflow
 
-### 1. Create a feature branch
-```bash
-git checkout -b feature/your-feature-name
-```
+### 1. Test-Driven Development (TDD)
+We use TDD for all new features:
 
-### 2. Write tests first
-Before implementing any functionality, write comprehensive tests:
+1. **Write failing tests first**
+2. **Implement minimal code to pass**
+3. **Refactor and improve**
+4. **Repeat**
 
+Example:
 ```bash
 # Create test file
-touch pkg/your-package/your-feature_test.go
+touch pkg/newfeature/feature_test.go
 
-# Write failing tests that describe the expected behavior
-# Run tests to confirm they fail
-make test
+# Write failing tests
+# Implement feature
+# Run tests
+go test ./pkg/newfeature -v
 ```
 
-### 3. Implement the feature
-Write the minimal code needed to make your tests pass:
+### 2. Code Organization
+- `pkg/` - Core packages and libraries
+- `cmd/` - CLI commands and main entry points
+- `examples/` - Example configurations and use cases
+- `docs/` - Documentation (auto-generated)
 
-```bash
-# Implement your feature
-# Run tests frequently
-make test
-```
+### 3. Testing Standards
+- **Unit tests** for all packages
+- **Integration tests** for end-to-end workflows
+- **Mock implementations** for external dependencies
+- **100% test coverage** goal for new code
 
-### 4. Refactor and improve
-Once tests are passing, improve the code quality:
+## Contribution Types
 
-- Remove duplication
-- Improve naming
-- Add documentation
-- Ensure error handling is robust
+### 🐛 Bug Fixes
+1. Create an issue describing the bug
+2. Write a test that reproduces the bug
+3. Fix the bug
+4. Ensure all tests pass
 
-### 5. Run the full test suite
-```bash
-make test
-make test-integration  # When available
-make lint
-```
+### ✨ New Features
+1. Check the [roadmap](README.md#implementation-status) first
+2. Create a feature request issue
+3. Discuss the approach with maintainers
+4. Implement using TDD
+5. Update documentation
+
+### 📚 Documentation
+1. Update relevant README files
+2. Add examples for new features
+3. Update API documentation
+4. Regenerate docs with `make docs`
+
+### 🧪 Testing
+1. Add test coverage for untested code
+2. Improve existing tests
+3. Add integration tests
+4. Performance testing
 
 ## Code Standards
 
-### Go Code Style
-- Follow standard Go formatting (`gofmt`)
-- Use meaningful variable and function names
-- Write clear, concise comments
-- Handle errors appropriately
-- Use interfaces for testability
+### Go Style
+- Follow [Go Code Review Comments](https://github.com/golang/go/wiki/CodeReviewComments)
+- Use `gofmt` and `golint`
+- Write clear, self-documenting code
+- Add comments for complex logic
 
-### Testing Standards
-- Write table-driven tests when appropriate
-- Use descriptive test names
-- Test both happy path and error cases
-- Mock external dependencies
-- Aim for high test coverage
-
-### Example Test Structure
+### Testing Style
 ```go
-func TestFeature_Method(t *testing.T) {
-    tests := []struct {
-        name     string
-        input    InputType
-        expected ExpectedType
-        wantErr  bool
-    }{
-        {
-            name:     "valid input",
-            input:    validInput,
-            expected: expectedOutput,
-            wantErr:  false,
-        },
-        {
-            name:    "invalid input",
-            input:   invalidInput,
-            wantErr: true,
-        },
+func TestFeature_Scenario(t *testing.T) {
+    // Arrange
+    input := setupTestData()
+    
+    // Act
+    result, err := feature.Process(input)
+    
+    // Assert
+    if err != nil {
+        t.Fatalf("Unexpected error: %v", err)
     }
-
-    for _, tt := range tests {
-        t.Run(tt.name, func(t *testing.T) {
-            result, err := Method(tt.input)
-            if tt.wantErr {
-                if err == nil {
-                    t.Error("expected error but got none")
-                }
-                return
-            }
-            if err != nil {
-                t.Errorf("unexpected error: %v", err)
-            }
-            if result != tt.expected {
-                t.Errorf("got %v, want %v", result, tt.expected)
-            }
-        })
+    
+    if result != expected {
+        t.Errorf("Expected %v, got %v", expected, result)
     }
 }
 ```
 
-## Project Structure
-
+### Commit Messages
+Use conventional commits:
 ```
-chisel/
-├── cmd/chisel/          # Main CLI application
-├── pkg/
-│   ├── cli/            # CLI commands and UI
-│   ├── core/           # Core business logic
-│   ├── providers/      # Resource providers
-│   ├── inventory/      # Inventory management
-│   ├── ssh/            # SSH connection handling
-│   └── types/          # Core types and interfaces
-├── internal/           # Private application code
-├── tests/
-│   ├── unit/          # Unit tests
-│   └── integration/   # Integration tests
-├── examples/          # Example configurations
-└── docs/             # Documentation
+type(scope): description
+
+feat(providers): add kubernetes provider
+fix(ssh): handle connection timeouts
+docs(readme): update installation instructions
+test(core): add module validation tests
 ```
 
-## Submitting Changes
+## Pull Request Process
 
-### Pull Request Process
-
-1. Ensure all tests pass
-2. Update documentation if needed
-3. Add entries to CHANGELOG.md for user-facing changes
-4. Create a pull request with:
-   - Clear title and description
-   - Reference to any related issues
-   - Screenshots/examples if applicable
-
-### Pull Request Template
-
-```markdown
-## Description
-Brief description of the changes
-
-## Type of Change
-- [ ] Bug fix
-- [ ] New feature
-- [ ] Breaking change
-- [ ] Documentation update
-
-## Testing
+### 1. Before Submitting
 - [ ] Tests pass locally
-- [ ] New tests added for new functionality
-- [ ] Integration tests pass (if applicable)
-
-## Checklist
-- [ ] Code follows project style guidelines
-- [ ] Self-review completed
+- [ ] Code follows style guidelines
 - [ ] Documentation updated
-- [ ] CHANGELOG.md updated (if user-facing)
-```
+- [ ] Self-review completed
 
-## Reporting Issues
+### 2. PR Requirements
+- Clear description of changes
+- Link to related issues
+- Test coverage for new code
+- Documentation updates
+- No breaking changes (unless discussed)
 
-### Bug Reports
-When reporting bugs, please include:
-- Chisel version
-- Operating system and version
-- Steps to reproduce
-- Expected vs actual behavior
-- Relevant logs or error messages
+### 3. Review Process
+1. Automated tests run
+2. Code review by maintainers
+3. Address feedback
+4. Approval and merge
 
-### Feature Requests
-For feature requests, please provide:
-- Clear description of the feature
-- Use case and motivation
-- Proposed implementation approach (if any)
-- Willingness to contribute the implementation
+## Priority Areas for Contribution
 
-## Community Guidelines
+### High Priority
+1. **Real provider implementations** - Replace mock implementations
+2. **SSH/WinRM connections** - Production-ready remote execution
+3. **Error handling** - Robust error handling and recovery
+4. **Performance** - Optimize execution speed
 
-- Be respectful and inclusive
-- Help others learn and grow
-- Focus on constructive feedback
-- Follow the project's code of conduct
+### Medium Priority
+1. **Additional providers** - Database, network, cloud resources
+2. **Cloud integrations** - GCP, DigitalOcean, etc.
+3. **Monitoring** - Enhanced metrics and observability
+4. **Security** - Vulnerability scanning, secure defaults
+
+### Nice to Have
+1. **Web UI enhancements** - Better dashboard features
+2. **Plugin system** - WASM-based extensions
+3. **Advanced workflows** - Complex orchestration patterns
+4. **Performance optimizations** - Caching, parallelization
 
 ## Getting Help
 
-- Check existing issues and documentation
-- Ask questions in GitHub Discussions
-- Join our community channels (when available)
+### Communication Channels
+- **GitHub Issues** - Bug reports and feature requests
+- **GitHub Discussions** - General questions and ideas
+- **Pull Requests** - Code review and collaboration
+
+### Resources
+- [Architecture Overview](docs/architecture.md)
+- [API Documentation](docs/api.md)
+- [Examples](examples/)
+- [Roadmap](README.md#implementation-status)
 
 ## Recognition
 
-Contributors will be recognized in:
-- CHANGELOG.md for significant contributions
-- README.md contributors section
-- Release notes for major features
+Contributors will be:
+- Listed in the project README
+- Mentioned in release notes
+- Invited to join the maintainer team (for significant contributions)
 
-Thank you for contributing to Chisel! 🪓
+## Code of Conduct
+
+This project follows the [Contributor Covenant Code of Conduct](CODE_OF_CONDUCT.md). By participating, you agree to uphold this code.
+
+## License
+
+By contributing to Chisel, you agree that your contributions will be licensed under the MIT License.
+
+---
+
+**Thank you for contributing to Chisel!**
+
+Your contributions help make infrastructure automation better for everyone.
