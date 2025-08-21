@@ -55,6 +55,7 @@ type EventBus struct {
 	ctx      context.Context
 	cancel   context.CancelFunc
 	wg       sync.WaitGroup
+	closed   bool
 }
 
 // NewEventBus creates a new event bus
@@ -106,6 +107,14 @@ func (b *EventBus) Unsubscribe(handler EventHandler) {
 
 // Publish publishes an event to the bus
 func (b *EventBus) Publish(event *Event) error {
+	b.mu.RLock()
+	closed := b.closed
+	b.mu.RUnlock()
+	
+	if closed {
+		return fmt.Errorf("event bus is closed")
+	}
+	
 	select {
 	case b.buffer <- event:
 		return nil
@@ -138,6 +147,10 @@ func (b *EventBus) PublishSync(ctx context.Context, event *Event) error {
 
 // Close shuts down the event bus
 func (b *EventBus) Close() error {
+	b.mu.Lock()
+	b.closed = true
+	b.mu.Unlock()
+	
 	b.cancel()
 	close(b.buffer)
 	b.wg.Wait()
