@@ -4,7 +4,7 @@
 
 [![Go Report Card](https://goreportcard.com/badge/github.com/ataiva-software/chisel)](https://goreportcard.com/report/github.com/ataiva-software/chisel)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![CI/CD](https://github.com/ataiva-software/chisel/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/ataiva-software/chisel/actions/workflows/ci-cd.yml)
+[![CI](https://github.com/ataiva-software/chisel/actions/workflows/test.yml/badge.svg)](https://github.com/ataiva-software/chisel/actions/workflows/test.yml)
 
 > **ALPHA SOFTWARE WARNING**
 >
@@ -22,26 +22,43 @@ Chisel is a modern, agentless configuration management and infrastructure orches
 
 ### Installation
 
-#### Download Pre-built Binaries
+#### Download Latest Release
+
+**Linux (x64)**
+```bash
+curl -L -o chisel https://github.com/ataiva-software/chisel/releases/latest/download/chisel-linux-amd64
+chmod +x chisel
+sudo mv chisel /usr/local/bin/
+```
+
+**Linux (ARM64)**
+```bash
+curl -L -o chisel https://github.com/ataiva-software/chisel/releases/latest/download/chisel-linux-arm64
+chmod +x chisel
+sudo mv chisel /usr/local/bin/
+```
+
+**macOS (Intel)**
+```bash
+curl -L -o chisel https://github.com/ataiva-software/chisel/releases/latest/download/chisel-darwin-amd64
+chmod +x chisel
+sudo mv chisel /usr/local/bin/
+```
+
+**macOS (Apple Silicon)**
+```bash
+curl -L -o chisel https://github.com/ataiva-software/chisel/releases/latest/download/chisel-darwin-arm64
+chmod +x chisel
+sudo mv chisel /usr/local/bin/
+```
+
+**Windows**
+Download the latest `chisel-windows-amd64.exe` from the [releases page](https://github.com/ataiva-software/chisel/releases/latest) and add to your PATH.
+
+#### Install with Go
 
 ```bash
-# Linux (x86_64)
-curl -L https://github.com/ataiva-software/chisel/releases/latest/download/chisel-linux-amd64 -o chisel
-chmod +x chisel
-sudo mv chisel /usr/local/bin/
-
-# macOS (Intel)
-curl -L https://github.com/ataiva-software/chisel/releases/latest/download/chisel-darwin-amd64 -o chisel
-chmod +x chisel
-sudo mv chisel /usr/local/bin/
-
-# macOS (Apple Silicon)
-curl -L https://github.com/ataiva-software/chisel/releases/latest/download/chisel-darwin-arm64 -o chisel
-chmod +x chisel
-sudo mv chisel /usr/local/bin/
-
-# Windows (PowerShell)
-Invoke-WebRequest -Uri "https://github.com/ataiva-software/chisel/releases/latest/download/chisel-windows-amd64.exe" -OutFile "chisel.exe"
+go install github.com/ataiva-software/chisel@latest
 ```
 
 #### Build from Source
@@ -49,10 +66,8 @@ Invoke-WebRequest -Uri "https://github.com/ataiva-software/chisel/releases/lates
 ```bash
 git clone https://github.com/ataiva-software/chisel.git
 cd chisel
-make build
-sudo cp bin/chisel /usr/local/bin/
+go build -o chisel ./cmd/chisel/
 ```
-
 ### Try It Out
 
 ```bash

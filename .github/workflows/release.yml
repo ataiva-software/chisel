@@ -1,0 +1,194 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Release version (e.g., v0.1.0)'
+        required: true
+        type: string
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    
+    - name: Set up Go
+      uses: actions/setup-go@v4
+      with:
+        go-version: '1.21'
+    
+    - name: Cache Go modules
+      uses: actions/cache@v3
+      with:
+        path: ~/go/pkg/mod
+        key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+        restore-keys: |
+          ${{ runner.os }}-go-
+    
+    - name: Download dependencies
+      run: go mod download
+    
+    - name: Run tests
+      run: go test -short -v ./...
+    
+    - name: Set version
+      id: version
+      run: |
+        if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+          echo "version=${{ github.event.inputs.version }}" >> $GITHUB_OUTPUT
+        else
+          echo "version=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+        fi
+    
+    - name: Build binaries
+      run: |
+        # Build for multiple platforms
+        GOOS=linux GOARCH=amd64 go build -ldflags="-X main.version=${{ steps.version.outputs.version }}" -o chisel-linux-amd64 ./cmd/chisel/
+        GOOS=linux GOARCH=arm64 go build -ldflags="-X main.version=${{ steps.version.outputs.version }}" -o chisel-linux-arm64 ./cmd/chisel/
+        GOOS=darwin GOARCH=amd64 go build -ldflags="-X main.version=${{ steps.version.outputs.version }}" -o chisel-darwin-amd64 ./cmd/chisel/
+        GOOS=darwin GOARCH=arm64 go build -ldflags="-X main.version=${{ steps.version.outputs.version }}" -o chisel-darwin-arm64 ./cmd/chisel/
+        GOOS=windows GOARCH=amd64 go build -ldflags="-X main.version=${{ steps.version.outputs.version }}" -o chisel-windows-amd64.exe ./cmd/chisel/
+    
+    - name: Create release notes
+      run: |
+        cat > release-notes.md << 'EOF'
+        # Chisel ${{ steps.version.outputs.version }}
+        
+        **Carving infrastructure into shape**
+        
+        > **ALPHA SOFTWARE WARNING**
+        > 
+        > Chisel is currently in **alpha stage**. While the architecture is solid and the CLI is functional, many providers use mock implementations for testing. This is perfect for:
+        > 
+        > - **Testing the CLI and workflow**
+        > - **Evaluating the architecture** 
+        > - **Providing feedback on the user experience**
+        > 
+        > **Not yet ready for production use.**
+        
+        ## Features
+        - **Agentless Configuration Management** - No agents to install or maintain
+        - **Plan/Apply Workflow** - Terraform-style planning with safe execution
+        - **Type-Safe Resources** - Strongly typed resource definitions
+        - **Multi-Provider Support** - AWS, GCP, Azure, Kubernetes, and more
+        - **Fast Execution** - Concurrent resource management
+        - **Secure by Default** - Built-in security best practices
+        
+        ## Supported Providers
+        - **AWS** - EC2, S3, VPC, IAM, and more
+        - **Google Cloud** - Compute Engine, Cloud Storage, IAM
+        - **Microsoft Azure** - Virtual Machines, Storage, Resource Groups
+        - **Kubernetes** - Deployments, Services, ConfigMaps
+        - **Docker** - Container management
+        - **SSH** - Remote server configuration
+        
+        ## Installation
+        
+        ### Download Binary
+        Download the appropriate binary for your platform from the assets below:
+        
+        **Linux (x64)**
+        ```bash
+        curl -L -o chisel https://github.com/ataiva-software/chisel/releases/download/${{ steps.version.outputs.version }}/chisel-linux-amd64
+        chmod +x chisel
+        sudo mv chisel /usr/local/bin/
+        ```
+        
+        **Linux (ARM64)**
+        ```bash
+        curl -L -o chisel https://github.com/ataiva-software/chisel/releases/download/${{ steps.version.outputs.version }}/chisel-linux-arm64
+        chmod +x chisel
+        sudo mv chisel /usr/local/bin/
+        ```
+        
+        **macOS (Intel)**
+        ```bash
+        curl -L -o chisel https://github.com/ataiva-software/chisel/releases/download/${{ steps.version.outputs.version }}/chisel-darwin-amd64
+        chmod +x chisel
+        sudo mv chisel /usr/local/bin/
+        ```
+        
+        **macOS (Apple Silicon)**
+        ```bash
+        curl -L -o chisel https://github.com/ataiva-software/chisel/releases/download/${{ steps.version.outputs.version }}/chisel-darwin-arm64
+        chmod +x chisel
+        sudo mv chisel /usr/local/bin/
+        ```
+        
+        **Windows**
+        Download `chisel-windows-amd64.exe` and add to your PATH.
+        
+        ### Install with Go
+        ```bash
+        go install github.com/ataiva-software/chisel@${{ steps.version.outputs.version }}
+        ```
+        
+        ## Quick Start
+        
+        ```bash
+        # Initialize a new project
+        chisel init my-infrastructure
+        cd my-infrastructure
+        
+        # Create a simple configuration
+        cat > main.chisel << 'EOF'
+        provider "aws" {
+          region = "us-east-1"
+        }
+        
+        resource "aws_instance" "web" {
+          ami           = "ami-0c02fb55956c7d316"
+          instance_type = "t3.micro"
+          
+          tags = {
+            Name = "web-server"
+          }
+        }
+        EOF
+        
+        # Plan the changes
+        chisel plan
+        
+        # Apply the configuration
+        chisel apply
+        ```
+        
+        ## Documentation
+        - [Getting Started Guide](https://github.com/ataiva-software/chisel/blob/main/docs/getting-started.md)
+        - [Configuration Reference](https://github.com/ataiva-software/chisel/blob/main/docs/configuration.md)
+        - [Provider Documentation](https://github.com/ataiva-software/chisel/blob/main/docs/providers/)
+        - [Examples](https://github.com/ataiva-software/chisel/blob/main/examples/)
+        EOF
+    
+    - name: Create or update tag
+      if: github.event_name == 'workflow_dispatch'
+      run: |
+        git config user.name github-actions
+        git config user.email github-actions@github.com
+        git tag -a ${{ steps.version.outputs.version }} -m "Release ${{ steps.version.outputs.version }}"
+        git push origin ${{ steps.version.outputs.version }}
+    
+    - name: Create Release
+      uses: softprops/action-gh-release@v1
+      with:
+        tag_name: ${{ steps.version.outputs.version }}
+        name: Chisel ${{ steps.version.outputs.version }}
+        body_path: release-notes.md
+        files: |
+          chisel-linux-amd64
+          chisel-linux-arm64
+          chisel-darwin-amd64
+          chisel-darwin-arm64
+          chisel-windows-amd64.exe
+        draft: false
+        prerelease: true
