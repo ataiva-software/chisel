@@ -60,3 +60,4 @@ plans/
 # Air (development tool) files
 .air.toml
 tmp/
+spec.md
