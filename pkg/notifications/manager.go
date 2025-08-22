@@ -6,7 +6,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/ataiva-software/chisel/pkg/events"
+	"github.com/ataiva-software/forge/pkg/events"
 )
 
 // NotificationManager manages notification channels and routing

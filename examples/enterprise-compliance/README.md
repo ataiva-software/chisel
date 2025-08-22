@@ -1,6 +1,6 @@
 # Enterprise Compliance Example
 
-This example demonstrates Chisel's enterprise-grade compliance and governance features, including:
+This example demonstrates Forge's enterprise-grade compliance and governance features, including:
 
 - **CIS Ubuntu 20.04 compliance** - Automated compliance checking
 - **Multi-stage approval workflows** - Production change management
@@ -32,25 +32,25 @@ This example demonstrates Chisel's enterprise-grade compliance and governance fe
 ### 1. Plan the Configuration
 ```bash
 # Check what changes will be made
-chisel plan --module module.yaml
+forge plan --module module.yaml
 
 # Run compliance checks
-chisel compliance check --module module.yaml --framework cis-ubuntu-20.04
+forge compliance check --module module.yaml --framework cis-ubuntu-20.04
 ```
 
 ### 2. Submit for Approval (Production)
 ```bash
 # Submit production change for approval
-chisel apply --module module.yaml --require-approval
+forge apply --module module.yaml --require-approval
 
 # Check approval status
-chisel approval status <request-id>
+forge approval status <request-id>
 ```
 
 ### 3. Apply After Approval
 ```bash
 # Apply changes after approval
-chisel apply --module module.yaml --approval-id <request-id>
+forge apply --module module.yaml --approval-id <request-id>
 ```
 
 ## Configuration Files
@@ -97,43 +97,43 @@ chisel apply --module module.yaml --approval-id <request-id>
 ### Check Compliance
 ```bash
 # Check CIS compliance
-chisel compliance check --module module.yaml --framework cis-ubuntu-20.04
+forge compliance check --module module.yaml --framework cis-ubuntu-20.04
 
 # Check NIST compliance  
-chisel compliance check --module module.yaml --framework nist-800-53
+forge compliance check --module module.yaml --framework nist-800-53
 
 # Check all loaded compliance frameworks
-chisel compliance check --module module.yaml --all
+forge compliance check --module module.yaml --all
 ```
 
 ### Approval Workflow
 ```bash
 # Create approval workflow
-chisel approval create-workflow --config approval-workflow.yaml
+forge approval create-workflow --config approval-workflow.yaml
 
 # Submit change for approval
-chisel apply --module module.yaml --environment production
+forge apply --module module.yaml --environment production
 
 # List pending approvals
-chisel approval list --status pending
+forge approval list --status pending
 
 # Approve a request
-chisel approval approve <request-id> --comment "Security review passed"
+forge approval approve <request-id> --comment "Security review passed"
 
 # Reject a request
-chisel approval reject <request-id> --comment "Security concerns identified"
+forge approval reject <request-id> --comment "Security concerns identified"
 ```
 
 ### Audit and Monitoring
 ```bash
 # View audit logs
-chisel audit logs --filter "action=apply" --since "24h"
+forge audit logs --filter "action=apply" --since "24h"
 
 # View policy violations
-chisel policy violations --module module.yaml
+forge policy violations --module module.yaml
 
 # View user activity
-chisel audit user-activity --user "admin@company.com" --since "7d"
+forge audit user-activity --user "admin@company.com" --since "7d"
 ```
 
 ## Integration with Enterprise Systems
@@ -166,7 +166,7 @@ monitoring:
   prometheus:
     endpoint: http://prometheus.company.com:9090
   grafana:
-    dashboard_url: https://grafana.company.com/d/chisel
+    dashboard_url: https://grafana.company.com/d/forge
 ```
 
 ## Benefits
@@ -189,4 +189,4 @@ monitoring:
 - **Policy enforcement** - Automated violation detection
 - **Reporting** - Compliance dashboards and reports
 
-This example showcases how Chisel enables enterprise-grade infrastructure management with built-in compliance, governance, and security features.
+This example showcases how Forge enables enterprise-grade infrastructure management with built-in compliance, governance, and security features.

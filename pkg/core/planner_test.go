@@ -3,7 +3,7 @@ package core
 import (
 	"testing"
 
-	"github.com/ataiva-software/chisel/pkg/types"
+	"github.com/ataiva-software/forge/pkg/types"
 )
 
 func TestPlan_AddChange(t *testing.T) {

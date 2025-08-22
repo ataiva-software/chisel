@@ -1,6 +1,6 @@
 # Simple File Management Example
 
-The simplest possible Chisel example - just create a file on a server.
+The simplest possible Forge example - just create a file on a server.
 
 ## What it does
 - Creates `/tmp/hello.txt` with some content
@@ -20,7 +20,7 @@ cd my-config
 vim module.yaml  # Change the host IP/hostname
 
 # 3. Run it (coming soon)
-chisel apply module.yaml
+forge apply module.yaml
 ```
 
-This is the absolute minimum Chisel configuration - perfect for getting started!
+This is the absolute minimum Forge configuration - perfect for getting started!

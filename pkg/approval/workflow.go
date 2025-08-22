@@ -6,7 +6,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/ataiva-software/chisel/pkg/core"
+	"github.com/ataiva-software/forge/pkg/core"
 )
 
 // Status represents the status of an approval request

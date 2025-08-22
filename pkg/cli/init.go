@@ -12,8 +12,8 @@ import (
 // initCmd represents the init command
 var initCmd = &cobra.Command{
 	Use:   "init [project-name]",
-	Short: "Initialize a new Chisel project",
-	Long: `Initialize a new Chisel project with the basic directory structure
+	Short: "Initialize a new Forge project",
+	Long: `Initialize a new Forge project with the basic directory structure
 and configuration files needed to get started.`,
 	Args: cobra.MaximumNArgs(1),
 	RunE: runInit,
@@ -55,7 +55,7 @@ func runInit(cmd *cobra.Command, args []string) error {
 		Kind:       "Project",
 		Metadata: Metadata{
 			Name:        projectName,
-			Description: "A Chisel configuration management project",
+			Description: "A Forge configuration management project",
 		},
 		Spec: ProjectSpec{
 			ModulePath: "./modules",
@@ -161,7 +161,7 @@ func runInit(cmd *cobra.Command, args []string) error {
 	// Create README
 	readme := fmt.Sprintf(`# %s
 
-This is a Chisel configuration management project.
+This is a Forge configuration management project.
 
 ## Getting Started
 
@@ -177,7 +177,7 @@ This is a Chisel configuration management project.
 
 ## Current Status
 
-Chisel is in active development. Currently implemented:
+Forge is in active development. Currently implemented:
 - ✅ Project initialization (` + "`chisel init`" + `)
 - ✅ Resource type system with file provider
 - ✅ SSH connection management
@@ -198,7 +198,7 @@ Chisel is in active development. Currently implemented:
 
 ## Documentation
 
-Visit https://github.com/ataiva-software/chisel for more information.
+Visit https://github.com/ataiva-software/forge for more information.
 `, projectName)
 
 	readmePath := filepath.Join(projectName, "README.md")
@@ -206,7 +206,7 @@ Visit https://github.com/ataiva-software/chisel for more information.
 		return fmt.Errorf("failed to create README: %w", err)
 	}
 
-	fmt.Printf("✅ Initialized Chisel project '%s'\n", projectName)
+	fmt.Printf("✅ Initialized Forge project '%s'\n", projectName)
 	fmt.Printf("📁 Project structure:\n")
 	fmt.Printf("   %s/\n", projectName)
 	fmt.Printf("   ├── chisel.yaml\n")

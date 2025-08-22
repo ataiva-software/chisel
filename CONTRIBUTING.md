@@ -1,10 +1,10 @@
-# Contributing to Chisel
+# Contributing to Forge
 
-Thank you for your interest in contributing to Chisel! This document provides guidelines and information for contributors.
+Thank you for your interest in contributing to Forge! This document provides guidelines and information for contributors.
 
 ## 🚨 Alpha Software Notice
 
-Chisel is currently in **alpha stage**. Many features use mock implementations for testing purposes. Please check our [implementation status](README.md#implementation-status) before contributing.
+Forge is currently in **alpha stage**. Many features use mock implementations for testing purposes. Please check our [implementation status](README.md#implementation-status) before contributing.
 
 ## Getting Started
 
@@ -16,7 +16,7 @@ Chisel is currently in **alpha stage**. Many features use mock implementations f
 ### Development Setup
 ```bash
 # Clone the repository
-git clone https://github.com/ataiva-software/chisel.git
+git clone https://github.com/ataiva-software/forge.git
 cd chisel
 
 # Install dependencies and build
@@ -195,10 +195,10 @@ This project follows the [Contributor Covenant Code of Conduct](CODE_OF_CONDUCT.
 
 ## License
 
-By contributing to Chisel, you agree that your contributions will be licensed under the MIT License.
+By contributing to Forge, you agree that your contributions will be licensed under the MIT License.
 
 ---
 
-**Thank you for contributing to Chisel!**
+**Thank you for contributing to Forge!**
 
 Your contributions help make infrastructure automation better for everyone.

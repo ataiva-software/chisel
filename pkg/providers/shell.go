@@ -4,8 +4,8 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/ataiva-software/chisel/pkg/ssh"
-	"github.com/ataiva-software/chisel/pkg/types"
+	"github.com/ataiva-software/forge/pkg/ssh"
+	"github.com/ataiva-software/forge/pkg/types"
 )
 
 // ShellProvider manages shell command execution resources

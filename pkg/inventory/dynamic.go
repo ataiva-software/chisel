@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/ataiva-software/chisel/pkg/types"
+	"github.com/ataiva-software/forge/pkg/types"
 )
 
 // DynamicInventory represents a dynamic inventory source

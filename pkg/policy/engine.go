@@ -8,8 +8,8 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/ataiva-software/chisel/pkg/core"
-	"github.com/ataiva-software/chisel/pkg/types"
+	"github.com/ataiva-software/forge/pkg/core"
+	"github.com/ataiva-software/forge/pkg/types"
 )
 
 // PolicyEngine manages and evaluates policies

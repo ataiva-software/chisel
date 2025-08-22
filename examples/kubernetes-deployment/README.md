@@ -1,6 +1,6 @@
 # Kubernetes Deployment Example
 
-This example demonstrates Chisel's Kubernetes provider capabilities for deploying a complete web application stack to Kubernetes.
+This example demonstrates Forge's Kubernetes provider capabilities for deploying a complete web application stack to Kubernetes.
 
 ## Features Demonstrated
 
@@ -35,16 +35,16 @@ This example demonstrates Chisel's Kubernetes provider capabilities for deployin
 ### 1. Plan the Deployment
 ```bash
 # Check what Kubernetes resources will be created
-chisel plan --module module.yaml
+forge plan --module module.yaml
 
 # Validate Kubernetes manifests
-chisel validate --module module.yaml --provider kubernetes
+forge validate --module module.yaml --provider kubernetes
 ```
 
 ### 2. Apply the Configuration
 ```bash
 # Apply to Kubernetes cluster
-chisel apply --module module.yaml
+forge apply --module module.yaml
 
 # Check deployment status
 kubectl get all -n web-app
@@ -151,7 +151,7 @@ kubectl logs -n web-app -l app=web-app
 ### Rolling Updates
 ```bash
 # Update the application image
-chisel apply --module module.yaml --var image_tag=v1.1.0
+forge apply --module module.yaml --var image_tag=v1.1.0
 
 # Monitor rollout status
 kubectl rollout status deployment/web-app -n web-app
@@ -187,33 +187,33 @@ kubectl describe pod <pod-name> -n web-app
 kubectl exec -it <pod-name> -n web-app -- /bin/sh
 ```
 
-## Integration with Chisel Features
+## Integration with Forge Features
 
 ### Compliance Checking
 ```bash
 # Check Kubernetes security policies
-chisel compliance check --module module.yaml --framework k8s-security
+forge compliance check --module module.yaml --framework k8s-security
 
 # Validate resource configurations
-chisel policy validate --module module.yaml --policy k8s-best-practices
+forge policy validate --module module.yaml --policy k8s-best-practices
 ```
 
 ### Drift Detection
 ```bash
 # Enable drift detection for Kubernetes resources
-chisel drift enable --module module.yaml --interval 5m
+forge drift enable --module module.yaml --interval 5m
 
 # Check for configuration drift
-chisel drift check --module module.yaml
+forge drift check --module module.yaml
 ```
 
 ### Approval Workflows
 ```bash
 # Production deployments require approval
-chisel apply --module module.yaml --environment production --require-approval
+forge apply --module module.yaml --environment production --require-approval
 
 # Check approval status
-chisel approval status <request-id>
+forge approval status <request-id>
 ```
 
 ## Troubleshooting
@@ -248,7 +248,7 @@ chisel approval status <request-id>
 ### Resource Cleanup
 ```bash
 # Remove all resources
-chisel destroy --module module.yaml
+forge destroy --module module.yaml
 
 # Or manually clean up
 kubectl delete namespace web-app
@@ -274,4 +274,4 @@ kubectl delete namespace web-app
 - **Observability** - Integrated monitoring and logging
 - **Governance** - Approval workflows for production changes
 
-This example showcases how Chisel enables modern Kubernetes deployments with enterprise-grade features like compliance checking, approval workflows, and drift detection.
+This example showcases how Forge enables modern Kubernetes deployments with enterprise-grade features like compliance checking, approval workflows, and drift detection.

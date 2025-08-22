@@ -3,7 +3,7 @@ package inventory
 import (
 	"testing"
 
-	"github.com/ataiva-software/chisel/pkg/ssh"
+	"github.com/ataiva-software/forge/pkg/ssh"
 )
 
 func TestInventory_Validate(t *testing.T) {

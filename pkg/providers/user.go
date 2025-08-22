@@ -7,8 +7,8 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/ataiva-software/chisel/pkg/ssh"
-	"github.com/ataiva-software/chisel/pkg/types"
+	"github.com/ataiva-software/forge/pkg/ssh"
+	"github.com/ataiva-software/forge/pkg/types"
 )
 
 // UserProvider manages user resources

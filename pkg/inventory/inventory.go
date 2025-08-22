@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/ataiva-software/chisel/pkg/ssh"
+	"github.com/ataiva-software/forge/pkg/ssh"
 	"gopkg.in/yaml.v3"
 )
 

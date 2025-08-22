@@ -125,7 +125,7 @@ Run: execution of a plan with streaming logs and signed results.
 
 Schema (YAML/JSON with JSON Schema + CUE types):
 
-apiVersion: fettle.dev/v1
+apiVersion: ataiva.com/chisel/v1
 kind: Module
 metadata:
   name: webserver

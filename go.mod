@@ -1,4 +1,4 @@
-module github.com/ataiva-software/chisel
+module github.com/ataiva-software/forge
 
 go 1.23.0
 

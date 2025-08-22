@@ -1,14 +1,14 @@
-# Chisel Documentation
+# Forge Documentation
 
-Welcome to the Chisel documentation! Chisel is a modern, agentless configuration management tool written in Go.
+Welcome to the Forge documentation! Forge is a modern, agentless configuration management tool written in Go.
 
 ## Documentation Sections
 
 ### [Getting Started](getting-started.md)
-Quick start guide to get you up and running with Chisel in minutes.
+Quick start guide to get you up and running with Forge in minutes.
 
 ### [User Guide](user-guide.md)
-Comprehensive guide covering all aspects of using Chisel for configuration management.
+Comprehensive guide covering all aspects of using Forge for configuration management.
 
 ### [Provider Documentation](providers.md)
 Detailed documentation for all built-in providers and their properties.

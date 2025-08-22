@@ -1,6 +1,6 @@
-# Chisel Examples
+# Forge Examples
 
-Simple, practical examples to get you started with Chisel configuration management.
+Simple, practical examples to get you started with Forge configuration management.
 
 ## Quick Start Examples
 
@@ -24,7 +24,7 @@ Create users and manage SSH access.
 
 ## Design Philosophy
 
-These examples follow Chisel's "simple by default" approach:
+These examples follow Forge's "simple by default" approach:
 
 - **One file per example** - No complex directory structures
 - **Self-contained** - Everything needed is in one place
@@ -46,7 +46,7 @@ These examples follow Chisel's "simple by default" approach:
 
 3. **Apply the configuration** (coming soon):
    ```bash
-   chisel apply module.yaml
+   forge apply module.yaml
    ```
 
 ## 📚 Learning Path
@@ -59,7 +59,7 @@ These examples follow Chisel's "simple by default" approach:
 ## 🆘 Need Help?
 
 - Visit [ataiva.com](https://ataiva.com) for documentation
-- Check the [GitHub repository](https://github.com/ataiva-software/chisel)
+- Check the [GitHub repository](https://github.com/ataiva-software/forge)
 - Look at the main README.md for more details
 
 ## Next Steps
@@ -70,4 +70,4 @@ Once you're comfortable with these examples:
 - Set up inventory files for multiple servers
 - Explore the plan/apply workflow (coming soon)
 
-Remember: Chisel is designed to be simple. If you find yourself creating complex directory structures, you might be overcomplicating it!
+Remember: Forge is designed to be simple. If you find yourself creating complex directory structures, you might be overcomplicating it!

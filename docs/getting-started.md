@@ -1,21 +1,21 @@
-# Getting Started with Chisel
+# Getting Started with Forge
 
 ## Installation
 
 ### From Source
 
 ```bash
-git clone https://github.com/ataiva-software/chisel.git
-cd chisel
+git clone https://github.com/ataiva-software/forge.git
+cd forge
 make build
 ```
 
-The binary will be available at `./bin/chisel`.
+The binary will be available at `./bin/forge`.
 
 ### Verify Installation
 
 ```bash
-./bin/chisel --version
+./bin/forge --version
 ```
 
 ## Quick Start
@@ -26,7 +26,7 @@ Create a simple file management module:
 
 ```yaml
 # hello.yaml
-apiVersion: ataiva.com/chisel/v1
+apiVersion: ataiva.com/forge/v1
 kind: Module
 metadata:
   name: hello-world
@@ -37,16 +37,16 @@ spec:
       name: hello-file
       state: present
       path: /tmp/hello.txt
-      content: "Hello from Chisel!"
+      content: "Hello from Forge!"
       mode: "0644"
 ```
 
 ### 2. Plan Your Changes
 
-See what Chisel will do before applying:
+See what Forge will do before applying:
 
 ```bash
-./bin/chisel plan --module hello.yaml
+./bin/forge plan --module hello.yaml
 ```
 
 ### 3. Apply Your Configuration
@@ -54,7 +54,7 @@ See what Chisel will do before applying:
 Apply the changes:
 
 ```bash
-./bin/chisel apply --module hello.yaml
+./bin/forge apply --module hello.yaml
 ```
 
 ### 4. Verify the Result
@@ -67,7 +67,7 @@ cat /tmp/hello.txt
 
 ### Resources
 
-Resources are the fundamental units in Chisel. Each resource has:
+Resources are the fundamental units in Forge. Each resource has:
 - **Type**: What kind of resource (file, pkg, service, user, shell)
 - **Name**: Unique identifier within the module
 - **State**: Desired state (present, absent, running, stopped)

@@ -7,9 +7,9 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/ataiva-software/chisel/pkg/ssh"
-	"github.com/ataiva-software/chisel/pkg/templating"
-	"github.com/ataiva-software/chisel/pkg/types"
+	"github.com/ataiva-software/forge/pkg/ssh"
+	"github.com/ataiva-software/forge/pkg/templating"
+	"github.com/ataiva-software/forge/pkg/types"
 )
 
 // FileProvider manages file resources

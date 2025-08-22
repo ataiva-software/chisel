@@ -15,9 +15,12 @@ var (
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
-	Use:   "chisel",
-	Short: "Carving infrastructure into shape",
-	Long: `Chisel is a modern, agentless configuration management and infrastructure 
+	Use:   "forge",
+	Short: "Forging modern infrastructure",
+	Long: `Forge is a modern, agentless configuration management and infrastructure 
+orchestration tool written in Go. It combines the best features of Terraform's 
+plan/apply workflow, Ansible's agentless approach, and Puppet's resource model 
+into a fast, typed, and secure platform.`,
 orchestration tool written in Go. It combines the best features of Terraform's 
 plan/apply workflow, Ansible's agentless approach, and Puppet's resource model 
 into a fast, typed, and secure platform.`,

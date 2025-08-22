@@ -8,15 +8,15 @@ import (
 	"testing"
 	"time"
 
-	"github.com/ataiva-software/chisel/pkg/core"
-	"github.com/ataiva-software/chisel/pkg/drift"
-	"github.com/ataiva-software/chisel/pkg/events"
-	"github.com/ataiva-software/chisel/pkg/executor"
-	"github.com/ataiva-software/chisel/pkg/inventory"
-	"github.com/ataiva-software/chisel/pkg/notifications"
-	"github.com/ataiva-software/chisel/pkg/providers"
-	"github.com/ataiva-software/chisel/pkg/ssh"
-	"github.com/ataiva-software/chisel/pkg/types"
+	"github.com/ataiva-software/forge/pkg/core"
+	"github.com/ataiva-software/forge/pkg/drift"
+	"github.com/ataiva-software/forge/pkg/events"
+	"github.com/ataiva-software/forge/pkg/executor"
+	"github.com/ataiva-software/forge/pkg/inventory"
+	"github.com/ataiva-software/forge/pkg/notifications"
+	"github.com/ataiva-software/forge/pkg/providers"
+	"github.com/ataiva-software/forge/pkg/ssh"
+	"github.com/ataiva-software/forge/pkg/types"
 )
 
 // TestFullSystemIntegration tests the complete system working together

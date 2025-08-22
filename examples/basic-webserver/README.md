@@ -17,7 +17,7 @@ cd my-webserver
 vim webserver.yaml  # Change host, user, etc.
 
 # 3. Deploy (coming soon)
-chisel apply webserver.yaml
+forge apply webserver.yaml
 ```
 
 After running, visit http://your-server-ip to see your site!

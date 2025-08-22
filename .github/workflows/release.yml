@@ -53,11 +53,11 @@ jobs:
     - name: Build binaries
       run: |
         # Build for multiple platforms
-        GOOS=linux GOARCH=amd64 go build -ldflags="-X main.version=${{ steps.version.outputs.version }}" -o chisel-linux-amd64 ./cmd/chisel/
-        GOOS=linux GOARCH=arm64 go build -ldflags="-X main.version=${{ steps.version.outputs.version }}" -o chisel-linux-arm64 ./cmd/chisel/
-        GOOS=darwin GOARCH=amd64 go build -ldflags="-X main.version=${{ steps.version.outputs.version }}" -o chisel-darwin-amd64 ./cmd/chisel/
-        GOOS=darwin GOARCH=arm64 go build -ldflags="-X main.version=${{ steps.version.outputs.version }}" -o chisel-darwin-arm64 ./cmd/chisel/
-        GOOS=windows GOARCH=amd64 go build -ldflags="-X main.version=${{ steps.version.outputs.version }}" -o chisel-windows-amd64.exe ./cmd/chisel/
+        GOOS=linux GOARCH=amd64 go build -ldflags="-X main.version=${{ steps.version.outputs.version }}" -o forge-linux-amd64 ./cmd/forge/
+        GOOS=linux GOARCH=arm64 go build -ldflags="-X main.version=${{ steps.version.outputs.version }}" -o forge-linux-arm64 ./cmd/forge/
+        GOOS=darwin GOARCH=amd64 go build -ldflags="-X main.version=${{ steps.version.outputs.version }}" -o forge-darwin-amd64 ./cmd/forge/
+        GOOS=darwin GOARCH=arm64 go build -ldflags="-X main.version=${{ steps.version.outputs.version }}" -o forge-darwin-arm64 ./cmd/forge/
+        GOOS=windows GOARCH=amd64 go build -ldflags="-X main.version=${{ steps.version.outputs.version }}" -o forge-windows-amd64.exe ./cmd/forge/
     
     - name: Create release notes
       run: |
@@ -99,49 +99,49 @@ jobs:
         
         **Linux (x64)**
         ```bash
-        curl -L -o chisel https://github.com/ataiva-software/chisel/releases/download/${{ steps.version.outputs.version }}/chisel-linux-amd64
-        chmod +x chisel
-        sudo mv chisel /usr/local/bin/
+        curl -L -o forge https://github.com/ataiva-software/forge/releases/download/${{ steps.version.outputs.version }}/forge-linux-amd64
+        chmod +x forge
+        sudo mv forge /usr/local/bin/
         ```
         
         **Linux (ARM64)**
         ```bash
-        curl -L -o chisel https://github.com/ataiva-software/chisel/releases/download/${{ steps.version.outputs.version }}/chisel-linux-arm64
-        chmod +x chisel
-        sudo mv chisel /usr/local/bin/
+        curl -L -o forge https://github.com/ataiva-software/forge/releases/download/${{ steps.version.outputs.version }}/forge-linux-arm64
+        chmod +x forge
+        sudo mv forge /usr/local/bin/
         ```
         
         **macOS (Intel)**
         ```bash
-        curl -L -o chisel https://github.com/ataiva-software/chisel/releases/download/${{ steps.version.outputs.version }}/chisel-darwin-amd64
-        chmod +x chisel
-        sudo mv chisel /usr/local/bin/
+        curl -L -o forge https://github.com/ataiva-software/forge/releases/download/${{ steps.version.outputs.version }}/forge-darwin-amd64
+        chmod +x forge
+        sudo mv forge /usr/local/bin/
         ```
         
         **macOS (Apple Silicon)**
         ```bash
-        curl -L -o chisel https://github.com/ataiva-software/chisel/releases/download/${{ steps.version.outputs.version }}/chisel-darwin-arm64
-        chmod +x chisel
-        sudo mv chisel /usr/local/bin/
+        curl -L -o forge https://github.com/ataiva-software/forge/releases/download/${{ steps.version.outputs.version }}/forge-darwin-arm64
+        chmod +x forge
+        sudo mv forge /usr/local/bin/
         ```
         
         **Windows**
-        Download `chisel-windows-amd64.exe` and add to your PATH.
+        Download `forge-windows-amd64.exe` and add to your PATH.
         
         ### Install with Go
         ```bash
-        go install github.com/ataiva-software/chisel@${{ steps.version.outputs.version }}
+        go install github.com/ataiva-software/forge@${{ steps.version.outputs.version }}
         ```
         
         ## Quick Start
         
         ```bash
         # Initialize a new project
-        chisel init my-infrastructure
+        forge init my-infrastructure
         cd my-infrastructure
         
         # Create a simple configuration
-        cat > main.chisel << 'EOF'
+        cat > main.forge << 'EOF'
         provider "aws" {
           region = "us-east-1"
         }
@@ -157,17 +157,17 @@ jobs:
         EOF
         
         # Plan the changes
-        chisel plan
+        forge plan
         
         # Apply the configuration
-        chisel apply
+        forge apply
         ```
         
         ## Documentation
-        - [Getting Started Guide](https://github.com/ataiva-software/chisel/blob/main/docs/getting-started.md)
-        - [Configuration Reference](https://github.com/ataiva-software/chisel/blob/main/docs/configuration.md)
-        - [Provider Documentation](https://github.com/ataiva-software/chisel/blob/main/docs/providers/)
-        - [Examples](https://github.com/ataiva-software/chisel/blob/main/examples/)
+        - [Getting Started Guide](https://github.com/ataiva-software/forge/blob/main/docs/getting-started.md)
+        - [Configuration Reference](https://github.com/ataiva-software/forge/blob/main/docs/configuration.md)
+        - [Provider Documentation](https://github.com/ataiva-software/forge/blob/main/docs/providers/)
+        - [Examples](https://github.com/ataiva-software/forge/blob/main/examples/)
         EOF
     
     - name: Create or update tag
@@ -185,10 +185,10 @@ jobs:
         name: Chisel ${{ steps.version.outputs.version }}
         body_path: release-notes.md
         files: |
-          chisel-linux-amd64
-          chisel-linux-arm64
-          chisel-darwin-amd64
-          chisel-darwin-arm64
-          chisel-windows-amd64.exe
+          forge-linux-amd64
+          forge-linux-arm64
+          forge-darwin-amd64
+          forge-darwin-arm64
+          forge-windows-amd64.exe
         draft: false
         prerelease: true

@@ -6,11 +6,11 @@ import (
 	"os"
 
 	"github.com/spf13/cobra"
-	"github.com/ataiva-software/chisel/pkg/core"
-	"github.com/ataiva-software/chisel/pkg/inventory"
-	"github.com/ataiva-software/chisel/pkg/providers"
-	"github.com/ataiva-software/chisel/pkg/ssh"
-	"github.com/ataiva-software/chisel/pkg/types"
+	"github.com/ataiva-software/forge/pkg/core"
+	"github.com/ataiva-software/forge/pkg/inventory"
+	"github.com/ataiva-software/forge/pkg/providers"
+	"github.com/ataiva-software/forge/pkg/ssh"
+	"github.com/ataiva-software/forge/pkg/types"
 )
 
 var (

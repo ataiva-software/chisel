@@ -6,8 +6,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/ataiva-software/chisel/pkg/core"
-	"github.com/ataiva-software/chisel/pkg/types"
+	"github.com/ataiva-software/forge/pkg/core"
+	"github.com/ataiva-software/forge/pkg/types"
 )
 
 // DriftResult represents the result of a drift detection check

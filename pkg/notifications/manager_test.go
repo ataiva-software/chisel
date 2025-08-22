@@ -8,7 +8,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/ataiva-software/chisel/pkg/events"
+	"github.com/ataiva-software/forge/pkg/events"
 )
 
 // TestNotificationChannel for testing

@@ -332,7 +332,7 @@ func generateGettingStarted(outputDir string) error {
 ### From Source
 
 ` + "```bash" + `
-git clone https://github.com/ataiva-software/chisel.git
+git clone https://github.com/ataiva-software/forge.git
 cd chisel
 make build
 ` + "```" + `

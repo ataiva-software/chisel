@@ -1,6 +1,6 @@
 # User Management Example
 
-This example demonstrates all of Chisel's core providers working together to set up a complete development user environment.
+This example demonstrates all of Forge's core providers working together to set up a complete development user environment.
 
 ## What This Example Does
 
@@ -36,13 +36,13 @@ This example demonstrates all of Chisel's core providers working together to set
 cd examples/user-management
 
 # Create a plan to see what will change
-../../bin/chisel plan --module module.yaml
+../../bin/forge plan --module module.yaml
 
 # Apply the configuration (dry run first)
-../../bin/chisel apply --module module.yaml --dry-run
+../../bin/forge apply --module module.yaml --dry-run
 
 # Apply for real
-../../bin/chisel apply --module module.yaml
+../../bin/forge apply --module module.yaml
 ```
 
 ## Expected Output
@@ -102,4 +102,4 @@ systemctl status ssh
 sudo -u devuser /home/devuser/scripts/hello.sh
 ```
 
-This example showcases Chisel's ability to manage complex, multi-resource configurations with proper ordering and dependencies.
+This example showcases Forge's ability to manage complex, multi-resource configurations with proper ordering and dependencies.

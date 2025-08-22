@@ -4,7 +4,7 @@ import (
 	"context"
 	"testing"
 
-	"github.com/ataiva-software/chisel/pkg/types"
+	"github.com/ataiva-software/forge/pkg/types"
 )
 
 func TestKubernetesProvider_Type(t *testing.T) {

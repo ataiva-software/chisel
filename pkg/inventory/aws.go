@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/ataiva-software/chisel/pkg/types"
+	"github.com/ataiva-software/forge/pkg/types"
 )
 
 // AWSInventoryProvider discovers targets from AWS EC2 instances

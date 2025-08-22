@@ -1,4 +1,4 @@
-apiVersion: ataiva.com/chisel/v1
+apiVersion: ataiva.com/forge/v1
 kind: Module
 metadata:
   name: basic-webserver

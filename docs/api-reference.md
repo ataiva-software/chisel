@@ -898,7 +898,7 @@ Executor executes plans by applying changes
 
 ##### Module
 
-Module represents a Chisel configuration module
+Module represents a Forge configuration module
 
 
 
@@ -1979,7 +1979,7 @@ DynamicInventory represents a dynamic inventory source
 
 ##### Inventory
 
-Inventory represents a Chisel inventory configuration
+Inventory represents a Forge inventory configuration
 
 
 
@@ -4469,7 +4469,7 @@ WebUIConfig represents web UI configuration
 
 ##### WebUIServer
 
-WebUIServer provides a web interface for Chisel
+WebUIServer provides a web interface for Forge
 
 
 

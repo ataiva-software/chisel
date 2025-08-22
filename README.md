@@ -1,14 +1,14 @@
-# Chisel
+# Forge
 
-**Carving infrastructure into shape**
+**Forging modern infrastructure**
 
-[![Go Report Card](https://goreportcard.com/badge/github.com/ataiva-software/chisel)](https://goreportcard.com/report/github.com/ataiva-software/chisel)
+[![Go Report Card](https://goreportcard.com/badge/github.com/ataiva-software/forge)](https://goreportcard.com/report/github.com/ataiva-software/forge)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![CI](https://github.com/ataiva-software/chisel/actions/workflows/test.yml/badge.svg)](https://github.com/ataiva-software/chisel/actions/workflows/test.yml)
+[![CI](https://github.com/ataiva-software/forge/actions/workflows/test.yml/badge.svg)](https://github.com/ataiva-software/forge/actions/workflows/test.yml)
 
 > **ALPHA SOFTWARE WARNING**
 >
-> Chisel is currently in **alpha stage**. While the architecture is solid and the CLI is functional, many providers use mock implementations for testing. This is perfect for:
+> Forge is currently in **alpha stage**. While the architecture is solid and the CLI is functional, many providers use mock implementations for testing. This is perfect for:
 >
 > - **Testing the CLI and workflow**
 > - **Evaluating the architecture**
@@ -16,7 +16,7 @@
 >
 > **Not yet ready for production use.** See [Implementation Status](#implementation-status) for details.
 
-Chisel is a modern, agentless configuration management and infrastructure orchestration tool written in Go. It combines the best features of Terraform's plan/apply workflow, Ansible's agentless approach, and Puppet's resource model into a fast, typed, and secure platform.
+Forge is a modern, agentless configuration management and infrastructure orchestration tool written in Go. It combines the best features of Terraform's plan/apply workflow, Ansible's agentless approach, and Puppet's resource model into a fast, typed, and secure platform.
 
 ## Quick Start
 
@@ -26,63 +26,63 @@ Chisel is a modern, agentless configuration management and infrastructure orches
 
 **Linux (x64)**
 ```bash
-curl -L -o chisel https://github.com/ataiva-software/chisel/releases/latest/download/chisel-linux-amd64
-chmod +x chisel
-sudo mv chisel /usr/local/bin/
+curl -L -o forge https://github.com/ataiva-software/forge/releases/latest/download/forge-linux-amd64
+chmod +x forge
+sudo mv forge /usr/local/bin/
 ```
 
 **Linux (ARM64)**
 ```bash
-curl -L -o chisel https://github.com/ataiva-software/chisel/releases/latest/download/chisel-linux-arm64
-chmod +x chisel
-sudo mv chisel /usr/local/bin/
+curl -L -o forge https://github.com/ataiva-software/forge/releases/latest/download/forge-linux-arm64
+chmod +x forge
+sudo mv forge /usr/local/bin/
 ```
 
 **macOS (Intel)**
 ```bash
-curl -L -o chisel https://github.com/ataiva-software/chisel/releases/latest/download/chisel-darwin-amd64
-chmod +x chisel
-sudo mv chisel /usr/local/bin/
+curl -L -o forge https://github.com/ataiva-software/forge/releases/latest/download/forge-darwin-amd64
+chmod +x forge
+sudo mv forge /usr/local/bin/
 ```
 
 **macOS (Apple Silicon)**
 ```bash
-curl -L -o chisel https://github.com/ataiva-software/chisel/releases/latest/download/chisel-darwin-arm64
-chmod +x chisel
-sudo mv chisel /usr/local/bin/
+curl -L -o forge https://github.com/ataiva-software/forge/releases/latest/download/forge-darwin-arm64
+chmod +x forge
+sudo mv forge /usr/local/bin/
 ```
 
 **Windows**
-Download the latest `chisel-windows-amd64.exe` from the [releases page](https://github.com/ataiva-software/chisel/releases/latest) and add to your PATH.
+Download the latest `forge-windows-amd64.exe` from the [releases page](https://github.com/ataiva-software/forge/releases/latest) and add to your PATH.
 
 #### Install with Go
 
 ```bash
-go install github.com/ataiva-software/chisel@latest
+go install github.com/ataiva-software/forge@latest
 ```
 
 #### Build from Source
 
 ```bash
-git clone https://github.com/ataiva-software/chisel.git
-cd chisel
-go build -o chisel ./cmd/chisel/
+git clone https://github.com/ataiva-software/forge.git
+cd forge
+go build -o forge ./cmd/forge/
 ```
 ### Try It Out
 
 ```bash
 # Initialize a new project
-chisel init my-infrastructure
+forge init my-infrastructure
 cd my-infrastructure
 
 # Create a plan to see what will change
-chisel plan --module modules/webserver.yaml --inventory inventory/hosts.yaml
+forge plan --module modules/webserver.yaml --inventory inventory/hosts.yaml
 
 # Apply changes (dry run first)
-chisel apply --module modules/webserver.yaml --inventory inventory/hosts.yaml --dry-run
+forge apply --module modules/webserver.yaml --inventory inventory/hosts.yaml --dry-run
 
 # Apply for real (with confirmation)
-chisel apply --module modules/webserver.yaml --inventory inventory/hosts.yaml
+forge apply --module modules/webserver.yaml --inventory inventory/hosts.yaml
 ```
 
 ## CLI Commands
@@ -91,36 +91,36 @@ chisel apply --module modules/webserver.yaml --inventory inventory/hosts.yaml
 
 ```bash
 # Initialize a new project
-chisel init <project-name>
+forge init <project-name>
 
 # Create an execution plan
-chisel plan --module <module.yaml> [--inventory <inventory.yaml>]
+forge plan --module <module.yaml> [--inventory <inventory.yaml>]
 
 # Apply changes to infrastructure
-chisel apply --module <module.yaml> [--inventory <inventory.yaml>] [--dry-run] [--auto-approve]
+forge apply --module <module.yaml> [--inventory <inventory.yaml>] [--dry-run] [--auto-approve]
 
 # Get help
-chisel --help
-chisel <command> --help
+forge --help
+forge <command> --help
 ```
 
 ### Examples
 
 ```bash
 # Plan changes for a module
-chisel plan --module examples/simple-file/module.yaml
+forge plan --module examples/simple-file/module.yaml
 
 # Apply changes with confirmation
-chisel apply --module examples/simple-file/module.yaml
+forge apply --module examples/simple-file/module.yaml
 
 # Dry run (show what would happen)
-chisel apply --module examples/simple-file/module.yaml --dry-run
+forge apply --module examples/simple-file/module.yaml --dry-run
 
 # Auto-approve (skip confirmation)
-chisel apply --module examples/simple-file/module.yaml --auto-approve
+forge apply --module examples/simple-file/module.yaml --auto-approve
 
 # Use with inventory
-chisel plan --module webserver.yaml --inventory hosts.yaml
+forge plan --module webserver.yaml --inventory hosts.yaml
 ```
 
 ## Architecture
@@ -146,7 +146,7 @@ chisel plan --module webserver.yaml --inventory hosts.yaml
 Typed units of infrastructure state (packages, files, services, users, etc.)
 
 ```yaml
-apiVersion: ataiva.com/chisel/v1
+apiVersion: ataiva.com/forge/v1
 kind: Module
 metadata:
   name: webserver
@@ -200,7 +200,7 @@ targets:
 Deterministic change previews
 
 ```bash
-$ chisel plan --inventory inventory/hosts.yaml --module webserver.yaml
+$ forge plan --inventory inventory/hosts.yaml --module webserver.yaml
 Plan: 3 to add, 1 to change, 0 to destroy
 
 + pkg.nginx
@@ -271,7 +271,7 @@ Plan: 3 to add, 1 to change, 0 to destroy
 - [ ] **GitOps workflows**
 - [ ] **CI/CD pipeline integration**
 - [ ] **Monitoring and observability**
-- [ ] **SaaS offering** (Chisel Cloud)
+- [ ] **SaaS offering** (Forge Cloud)
 
 ## Development
 
@@ -332,7 +332,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines.
 ### Simple File Management
 
 ```yaml
-apiVersion: ataiva.com/chisel/v1
+apiVersion: ataiva.com/forge/v1
 kind: Module
 metadata:
   name: simple-file
@@ -342,14 +342,14 @@ spec:
       name: hello-file
       state: present
       path: /tmp/hello.txt
-      content: "Hello from Chisel!"
+      content: "Hello from Forge!"
       mode: "0644"
 ```
 
 ### Complete User Environment
 
 ```yaml
-apiVersion: ataiva.com/chisel/v1
+apiVersion: ataiva.com/forge/v1
 kind: Module
 metadata:
   name: user-management
@@ -415,9 +415,9 @@ MIT License - see [LICENSE](LICENSE) file for details.
 ## Community
 
 - **Website**: [ataiva.com](https://ataiva.com)
-- **GitHub**: [github.com/ataiva-software/chisel](https://github.com/ataiva-software/chisel)
-- **Discussions**: [GitHub Discussions](https://github.com/ataiva-software/chisel/discussions)
-- **Issues**: [GitHub Issues](https://github.com/ataiva-software/chisel/issues)
+- **GitHub**: [github.com/ataiva-software/forge](https://github.com/ataiva-software/forge)
+- **Discussions**: [GitHub Discussions](https://github.com/ataiva-software/forge/discussions)
+- **Issues**: [GitHub Issues](https://github.com/ataiva-software/forge/issues)
 
 ## Contributing
 
@@ -441,10 +441,10 @@ We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guid
 
 ### Alpha Releases
 
-Chisel follows semantic versioning. Alpha releases are available for testing:
+Forge follows semantic versioning. Alpha releases are available for testing:
 
 - **v0.1.0-alpha** - Initial alpha release with core functionality
-- Check [releases page](https://github.com/ataiva-software/chisel/releases) for latest versions
+- Check [releases page](https://github.com/ataiva-software/forge/releases) for latest versions
 
 ### Release Schedule
 
@@ -454,7 +454,7 @@ Chisel follows semantic versioning. Alpha releases are available for testing:
 
 ## Acknowledgments
 
-Chisel learns from and builds upon the excellent work of:
+Forge learns from and builds upon the excellent work of:
 
 - Terraform (HashiCorp)
 - Ansible (Red Hat)

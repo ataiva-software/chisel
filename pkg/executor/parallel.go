@@ -6,7 +6,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/ataiva-software/chisel/pkg/types"
+	"github.com/ataiva-software/forge/pkg/types"
 )
 
 // ExecutionResult represents the result of executing a resource

@@ -5,7 +5,7 @@ import (
 	"os"
 	"regexp"
 
-	"github.com/ataiva-software/chisel/pkg/types"
+	"github.com/ataiva-software/forge/pkg/types"
 	"gopkg.in/yaml.v3"
 )
 

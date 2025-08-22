@@ -7,7 +7,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/ataiva-software/chisel/pkg/types"
+	"github.com/ataiva-software/forge/pkg/types"
 )
 
 func TestEventBus_SubscribeAndPublish(t *testing.T) {

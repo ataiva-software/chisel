@@ -4,8 +4,8 @@ import (
 	"context"
 	"testing"
 
-	"github.com/ataiva-software/chisel/pkg/core"
-	"github.com/ataiva-software/chisel/pkg/types"
+	"github.com/ataiva-software/forge/pkg/core"
+	"github.com/ataiva-software/forge/pkg/types"
 )
 
 func TestPolicyEngine_New(t *testing.T) {

@@ -5,7 +5,7 @@
 ### Basic Module
 
 ```yaml
-apiVersion: ataiva.com/chisel/v1
+apiVersion: ataiva.com/forge/v1
 kind: Module
 metadata:
   name: my-module
@@ -105,7 +105,7 @@ Execute commands:
 
 ```yaml
 # inventory.yaml
-apiVersion: ataiva.com/chisel/v1
+apiVersion: ataiva.com/forge/v1
 kind: Inventory
 metadata:
   name: my-inventory
@@ -128,8 +128,8 @@ spec:
 ### Using Inventory
 
 ```bash
-chisel plan --module module.yaml --inventory inventory.yaml
-chisel apply --module module.yaml --inventory inventory.yaml
+forge plan --module module.yaml --inventory inventory.yaml
+forge apply --module module.yaml --inventory inventory.yaml
 ```
 
 ## Advanced Features
@@ -197,8 +197,8 @@ Shell resources support conditional execution:
 Run with verbose output:
 
 ```bash
-chisel plan --module module.yaml --verbose
-chisel apply --module module.yaml --verbose
+forge plan --module module.yaml --verbose
+forge apply --module module.yaml --verbose
 ```
 
 ### Dry Run
@@ -206,5 +206,5 @@ chisel apply --module module.yaml --verbose
 Test changes without applying:
 
 ```bash
-chisel apply --module module.yaml --dry-run
+forge apply --module module.yaml --dry-run
 ```
